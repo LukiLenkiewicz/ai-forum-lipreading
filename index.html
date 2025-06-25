@@ -3,55 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HyperLip: Novel Hypernetwork Architecture for Lipreading</title>
+    <title>FLipNet: Few-Shot Learning for Lipreading</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-red: #dc2626;
+            --secondary-red: #ef4444;
+            --light-red: #fef2f2;
+            --dark-red: #991b1b;
+            --black: #0f0f0f;
+            --dark-gray: #1f1f1f;
+            --medium-gray: #404040;
+            --light-gray: #f8f9fa;
+            --white: #ffffff;
+            --border-light: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            color: var(--black);
+            background: var(--white);
+            font-weight: 400;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
             min-height: 100vh;
         }
 
         header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 2rem 0;
+            background: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%);
+            color: var(--white);
+            padding: 4rem 2rem;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--primary-red) 0%, transparent 50%);
+            opacity: 0.1;
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             opacity: 0.9;
-            font-weight: 300;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         nav {
-            background: #34495e;
-            padding: 1rem 0;
+            background: var(--white);
+            padding: 0;
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid var(--border-light);
+            box-shadow: var(--shadow);
         }
 
         nav ul {
@@ -59,133 +98,204 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         nav li {
-            margin: 0 1rem;
+            margin: 0;
         }
 
         nav a {
-            color: white;
+            color: var(--black);
             text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            padding: 1.25rem 2rem;
+            display: block;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
         }
 
         nav a:hover {
-            background-color: rgba(255,255,255,0.1);
+            color: var(--primary-red);
+            border-bottom-color: var(--primary-red);
+            background: var(--light-red);
         }
 
         main {
-            padding: 2rem;
+            padding: 4rem 2rem;
         }
 
         section {
-            margin-bottom: 4rem;
-            padding: 2rem 0;
-            border-bottom: 1px solid #eee;
+            margin-bottom: 6rem;
+            padding: 0;
         }
 
         section:last-child {
-            border-bottom: none;
+            margin-bottom: 2rem;
         }
 
         h2 {
-            font-size: 2rem;
-            color: #2c3e50;
-            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            color: var(--black);
+            margin-bottom: 3rem;
             text-align: center;
+            font-weight: 700;
+            letter-spacing: -0.02em;
             position: relative;
         }
 
         h2::after {
             content: '';
             display: block;
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0.5rem auto;
+            width: 60px;
+            height: 4px;
+            background: var(--primary-red);
+            margin: 1.5rem auto 0;
+            border-radius: 2px;
         }
 
         p {
-            margin-bottom: 1.2rem;
-            font-size: 1.1rem;
-            text-align: justify;
-            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.125rem;
+            line-height: 1.75;
+            color: var(--medium-gray);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .image-container {
             text-align: center;
-            margin: 2rem 0;
+            margin: 3rem 0;
         }
 
         .image-container img {
             max-width: 100%;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
         }
 
         .image-caption {
             font-style: italic;
-            color: #666;
+            color: var(--medium-gray);
             margin-top: 1rem;
             font-size: 0.95rem;
+            font-weight: 400;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
-            margin: 2rem 0;
+            margin: 3rem 0;
         }
 
         .card {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-red);
         }
 
         .card h3 {
-            color: #2c3e50;
+            color: var(--black);
             margin-bottom: 1rem;
-            font-size: 1.3rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 0;
         }
 
         .highlight {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            margin: 2rem 0;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
+            color: var(--white);
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            margin: 3rem 0;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></svg>') repeat;
+            opacity: 0.3;
         }
 
         .highlight h3 {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             margin-bottom: 1rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .highlight p {
+            font-size: 1.125rem;
+            position: relative;
+            z-index: 1;
+            color: var(--white);
+            opacity: 0.95;
         }
 
         .method-flow {
-            background: #f8f9fa;
-            padding: 2rem;
-            border-radius: 10px;
-            margin: 2rem 0;
+            background: var(--light-gray);
+            padding: 3rem;
+            border-radius: 16px;
+            margin: 3rem 0;
+            border: 1px solid var(--border-light);
+        }
+
+        .method-flow h3 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--black);
+            font-weight: 600;
+            text-align: center;
         }
 
         .method-flow ol {
             list-style: none;
             counter-reset: step-counter;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .method-flow li {
             counter-increment: step-counter;
-            margin-bottom: 1rem;
-            padding-left: 3rem;
+            margin-bottom: 1.5rem;
+            padding-left: 4rem;
             position: relative;
-            font-size: 1.1rem;
+            font-size: 1.125rem;
+            line-height: 1.6;
+            color: var(--medium-gray);
+        }
+
+        .method-flow li:last-child {
+            margin-bottom: 0;
         }
 
         .method-flow li::before {
@@ -193,26 +303,38 @@
             position: absolute;
             left: 0;
             top: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            width: 2rem;
-            height: 2rem;
+            background: var(--primary-red);
+            color: var(--white);
+            width: 2.5rem;
+            height: 2.5rem;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .method-flow strong {
+            color: var(--black);
+            font-weight: 600;
         }
 
         footer {
-            background: #2c3e50;
-            color: white;
+            background: var(--black);
+            color: var(--white);
             text-align: center;
-            padding: 2rem;
+            padding: 3rem 2rem;
+            font-size: 0.95rem;
         }
 
+        /* Responsive Design */
         @media (max-width: 768px) {
             h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
                 font-size: 2rem;
             }
             
@@ -221,12 +343,63 @@
                 align-items: center;
             }
             
+            nav a {
+                padding: 1rem 1.5rem;
+                width: 100%;
+                text-align: center;
+                border-bottom: none;
+                border-right: 3px solid transparent;
+            }
+            
+            nav a:hover {
+                border-right-color: var(--primary-red);
+                border-bottom-color: transparent;
+            }
+            
             main {
-                padding: 1rem;
+                padding: 2rem 1rem;
             }
             
             .grid {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .method-flow {
+                padding: 2rem 1.5rem;
+            }
+            
+            .method-flow li {
+                padding-left: 3.5rem;
+                font-size: 1rem;
+            }
+            
+            .method-flow li::before {
+                width: 2rem;
+                height: 2rem;
+                font-size: 0.9rem;
+            }
+            
+            header {
+                padding: 3rem 1rem;
+            }
+            
+            .highlight {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.125rem;
+            }
+            
+            p {
+                font-size: 1rem;
             }
         }
     </style>
@@ -234,16 +407,18 @@
 <body>
     <div class="container">
         <header>
-            <h1>HyperLip</h1>
-            <p class="subtitle">Novel Hypernetwork Architecture for Advanced Lipreading</p>
+            <h1>FLipNet</h1>
+            <p class="subtitle">Few-Shot Learning for Advanced Lipreading</p>
         </header>
 
         <nav>
             <ul>
                 <li><a href="#introduction">Introduction</a></li>
                 <li><a href="#goal">Goal</a></li>
+                <li><a href="#preprocessing">Data Preprocessing</a></li>
+                <li><a href="#background">Few-Shot Learning</a></li>
+                <li><a href="#settings">Experimental Settings</a></li>
                 <li><a href="#method">Method</a></li>
-                <li><a href="#background">Background</a></li>
                 <li><a href="#results">Results</a></li>
             </ul>
         </nav>
@@ -281,33 +456,22 @@
                 </p>
             </section>
 
-            <section id="method">
-                <h2>Method Overview</h2>
+            <section id="preprocessing">
+                <h2>Data Preprocessing</h2>
                 <div class="image-container">
-                    <img src="assets/overview.webp" alt="Architecture Overview" />
-                    <p class="image-caption">Figure 1: Complete architecture overview of our hypernetwork-based lipreading system</p>
+                    <img src="assets/preprocessing.webp" alt="Data Preprocessing Pipeline" />
+                    <p class="image-caption">Figure 1: Data preprocessing pipeline for lipreading input preparation</p>
                 </div>
-                
-                <div class="method-flow">
-                    <h3>Architecture Pipeline</h3>
-                    <ol>
-                        <li><strong>Support Set Processing:</strong> Samples from the support set are fed through our specialized feature extractor</li>
-                        <li><strong>Spatiotemporal Feature Extraction:</strong> The feature extractor utilizes spatiotemporal convolution combined with Gated Recurrent Units (GRU) to capture both spatial lip movement patterns and temporal dynamics</li>
-                        <li><strong>Embedding Generation:</strong> The extracted features are transformed into rich embeddings that capture speaker-specific characteristics</li>
-                        <li><strong>Cross-Attention Fusion:</strong> The embeddings are merged with ground truth labels using a cross-attention mechanism, creating contextually aware representations</li>
-                        <li><strong>Hypernetwork Processing:</strong> The fused representations serve as input to our hypernetwork, which generates speaker-specific weight updates</li>
-                        <li><strong>Dynamic Weight Adaptation:</strong> The hypernetwork generates weight updates for the linear prediction layer, adapting the model to the specific speaker</li>
-                        <li><strong>Prediction:</strong> The updated linear layer processes query samples to predict what the user has said</li>
-                    </ol>
-                </div>
-
                 <p>
-                    This architecture elegantly combines the power of spatiotemporal feature learning with the adaptive capabilities of hypernetworks. The spatiotemporal convolution captures the essential visual patterns of lip movements, while the GRU component models the temporal dependencies critical for understanding speech sequences. The cross-attention mechanism ensures that the hypernetwork receives contextually rich information, enabling it to generate highly effective weight modifications for speaker adaptation.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                </p>
+                <p>
+                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
                 </p>
             </section>
 
             <section id="background">
-                <h2>Background: Few-Shot Learning</h2>
+                <h2>Few-Shot Learning</h2>
                 <p>
                     Few-shot learning is a machine learning paradigm designed to enable models to learn new tasks or adapt to new data with only a few training examples. This approach is particularly valuable in scenarios where collecting large amounts of labeled data is expensive, time-consuming, or impractical—such as in personalized healthcare applications.
                 </p>
@@ -345,12 +509,90 @@
                 </p>
             </section>
 
+            <section id="settings">
+                <h2>Experimental Settings</h2>
+                
+                <div class="grid">
+                    <div class="card">
+                        <h3>Unseen Setting</h3>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        </p>
+                        <p>
+                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+                        </p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Overlapped Setting</h3>
+                        <p>
+                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident. Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+                        </p>
+                        <p>
+                            Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus.
+                        </p>
+                    </div>
+                </div>
+
+                <p>
+                    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+                </p>
+            </section>
+
+            <section id="method">
+                <h2>Method</h2>
+                
+                <h3 style="font-size: 1.75rem; color: var(--black); margin-bottom: 2rem; text-align: center; font-weight: 600;">Architecture Overview</h3>
+                <div class="image-container">
+                    <img src="assets/overview.webp" alt="Architecture Overview" />
+                    <p class="image-caption">Figure 2: Complete architecture overview of our FLipNet system</p>
+                </div>
+                
+                <div class="method-flow">
+                    <h3>Architecture Pipeline</h3>
+                    <ol>
+                        <li><strong>Support Set Processing:</strong> Samples from the support set are fed through our specialized feature extractor</li>
+                        <li><strong>Spatiotemporal Feature Extraction:</strong> The feature extractor utilizes spatiotemporal convolution combined with Gated Recurrent Units (GRU) to capture both spatial lip movement patterns and temporal dynamics</li>
+                        <li><strong>Embedding Generation:</strong> The extracted features are transformed into rich embeddings that capture speaker-specific characteristics</li>
+                        <li><strong>Cross-Attention Fusion:</strong> The embeddings are merged with ground truth labels using a cross-attention mechanism, creating contextually aware representations</li>
+                        <li><strong>Hypernetwork Processing:</strong> The fused representations serve as input to our hypernetwork, which generates speaker-specific weight updates</li>
+                        <li><strong>Dynamic Weight Adaptation:</strong> The hypernetwork generates weight updates for the linear prediction layer, adapting the model to the specific speaker</li>
+                        <li><strong>Prediction:</strong> The updated linear layer processes query samples to predict what the user has said</li>
+                    </ol>
+                </div>
+
+                <h3 style="font-size: 1.5rem; color: var(--black); margin: 3rem 0 1.5rem 0; font-weight: 600;">Cross-Attention Mechanism</h3>
+                <div class="image-container">
+                    <img src="assets/cross_attention.webp" alt="Cross-Attention Processing" />
+                    <p class="image-caption">Figure 3: Cross-attention mechanism for embedding fusion</p>
+                </div>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+
+                <h3 style="font-size: 1.5rem; color: var(--black); margin: 3rem 0 1.5rem 0; font-weight: 600;">Hypernetwork Architecture</h3>
+                <div class="image-container">
+                    <img src="assets/hypernetwork.webp" alt="Hypernetwork Architecture" />
+                    <p class="image-caption">Figure 4: Hypernetwork architecture for dynamic weight generation</p>
+                </div>
+                <p>
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident. Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.
+                </p>
+                <p>
+                    Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.
+                </p>
+
+                <p>
+                    This architecture elegantly combines the power of spatiotemporal feature learning with the adaptive capabilities of hypernetworks. The spatiotemporal convolution captures the essential visual patterns of lip movements, while the GRU component models the temporal dependencies critical for understanding speech sequences. The cross-attention mechanism ensures that the hypernetwork receives contextually rich information, enabling it to generate highly effective weight modifications for speaker adaptation.
+                </p>
+            </section>
+
             <section id="results">
                 <h2>Results</h2>
                 <div class="highlight">
                     <h3>State-of-the-Art Performance</h3>
                     <p>
-                        Our HyperLip architecture represents the current state-of-the-art in lipreading technology, significantly outperforming existing solutions across multiple evaluation metrics.
+                        Our FLipNet architecture represents the current state-of-the-art in lipreading technology, significantly outperforming existing solutions across multiple evaluation metrics.
                     </p>
                 </div>
 
@@ -386,7 +628,7 @@
                 </div>
 
                 <p>
-                    These results establish our HyperLip architecture as the new benchmark for adaptive lipreading systems. The combination of superior accuracy, rapid adaptation, and robust generalization makes it particularly suitable for real-world healthcare applications where reliable communication with non-verbal patients is critical.
+                    These results establish our FLipNet architecture as the new benchmark for adaptive lipreading systems. The combination of superior accuracy, rapid adaptation, and robust generalization makes it particularly suitable for real-world healthcare applications where reliable communication with non-verbal patients is critical.
                 </p>
 
                 <p>
@@ -396,7 +638,7 @@
         </main>
 
         <footer>
-            <p>&copy; 2024 HyperLip Research Team. Advancing AI for Healthcare Communication.</p>
+            <p>&copy; 2024 FLipNet Research Team.</p>
         </footer>
     </div>
 </body>
