@@ -41,22 +41,18 @@
         <main>
             <section id="introduction">
                 <h2>Wprowadzenie</h2>
-                <p><strong>Odczytywanie mowy z ruchu warg</strong> (ang. <em>lipreading</em>) to proces rozpoznawania wypowiedzi na podstawie ruchów ust mówcy. Choć dla większości z nas jest to umiejętność wspomagająca słuch, w sytuacjach, gdy dźwięk jest niedostępny lub zakłócony, staje się ona kluczowa. Technologia lipreadingu ma ogromny potencjał – może wspierać <strong>komunikację w hałaśliwym otoczeniu</strong>, a także umożliwiać porozumiewanie się <strong>osobom, które nie są w stanie komunikować się werbalnie</strong>, np. pacjenci po operacjach lub z zaburzeniami neurologicznymi.</p>
+                <p><strong>Odczytywanie mowy z ruchu warg</strong> (ang. <em>lipreading</em>) to proces rozpoznawania wypowiedzi na podstawie ruchów ust mówcy. Choć dla większości z nas jest to umiejętność wspomagająca słuch, w sytuacjach, gdy dźwięk jest niedostępny lub zakłócony, staje się ona kluczowa. Technologia lipreadingu ma ogromny potencjał – może wspierać komunikację w hałaśliwym otoczeniu, a także umożliwiać porozumiewanie się osobom, które nie są w stanie komunikować się werbalnie, np. pacjenci po operacjach lub z zaburzeniami neurologicznymi.</p>
               
-                <p>W naszej pracy prezentujemy <strong>nowatorską architekturę do odczytywania mowy z ruchu warg</strong>. Nasze podejście wykorzystuje <em>hipersieci</em> (ang. <em>hypernetworks</em>) do dynamicznej aktualizacji wag głównego modelu, co umożliwia <strong>dostosowanie się do wcześniej niewidzianych mówców</strong>. Dzięki temu model potrafi efektywnie przystosować się do indywidualnych cech mimiki konkretnej osoby, co przekłada się na wyższą dokładność predykcji.</p>
+                <p>W naszej pracy prezentujemy nowatorską architekturę do odczytywania mowy z ruchu warg. Nasze podejście wykorzystuje <em>hipersieci</em> (ang. <em>hypernetworks</em>) do dynamicznej aktualizacji wag głównego modelu, co umożliwia <strong>dostosowanie się do wcześniej niewidzianych mówców</strong>. Dzięki temu model potrafi efektywnie przystosować się do indywidualnych cech mimiki konkretnej osoby, co przekłada się na wyższą dokładność predykcji.</p>
               
-                <p>Nasze rozwiązanie zostało zweryfikowane na zbiorze danych <strong>GRID</strong>, będącym standardem w badaniach nad lipreadingiem, i osiąga <strong>wyniki na poziomie state-of-the-art</strong>. Otwiera to nowe możliwości zastosowań – od <strong>cichych interfejsów głosowych</strong>, przez <strong>rozpoznawanie mowy w hałaśliwym otoczeniu</strong>, aż po <strong>technologie wspomagające osoby niemówiące</strong>.</p>
+                <p>Nasze rozwiązanie zostało zweryfikowane na zbiorze danych <strong>GRID</strong>, będącym standardem w badaniach nad lipreadingiem, i osiąga <strong>wyniki na poziomie state-of-the-art</strong>. Otwiera to nowe możliwości zastosowań – od cichych interfejsów głosowych, przez rozpoznawanie mowy w hałaśliwym otoczeniu, aż po technologie wspomagające osoby niemówiące.</p>
               </section>              
 
             <section id="preprocessing">
                 <h2>Przygotowanie danych</h2>
-                <div class="image-container">
-                    <img src="assets/preprocessing.webp" alt="Data Preprocessing Pipeline" />
-                    <p class="image-caption">Figure 1: Data preprocessing pipeline for lipreading input preparation</p>
-                </div>
-                <p>W celu zwiększenia skuteczności modelu oraz redukcji nieistotnych informacji wizualnych, zastosowaliśmy preprocessing nagrań wideo z wykorzystaniem bibliotek <strong>OpenCV</strong> oraz <strong>MediaPipe</strong>. Dla każdego nagrania automatycznie wykrywaliśmy twarz, a następnie wycinaliśmy region odpowiadający <strong>ustom mówcy</strong>.</p>
+                <p>W celu zwiększenia skuteczności modelu oraz redukcji nieistotnych informacji wizualnych, zastosowaliśmy preprocessing nagrań wideo z wykorzystaniem bibliotek <strong>OpenCV</strong> oraz <strong>MediaPipe</strong>. Dla każdego nagrania automatycznie wykrywaliśmy twarz, a następnie wycinaliśmy region odpowiadający ustom mówcy.</p>
               
-                <p>Takie podejście pozwala usunąć zbędny szum z wejścia do modelu, koncentrując się wyłącznie na istotnych sygnałach wizualnych związanych z artykulacją. Dodatkowo, <strong>zmniejszenie rozmiaru wejściowych danych</strong> przekłada się na <strong>niższe zapotrzebowanie na zasoby obliczeniowe</strong> i szybsze działanie całego systemu.</p>
+                <p>Takie podejście pozwala usunąć zbędny szum z wejścia do modelu, koncentrując się wyłącznie na istotnych sygnałach wizualnych związanych z artykulacją. Dodatkowo, zmniejszenie rozmiaru wejściowych danych przekłada się na <strong>niższe zapotrzebowanie na zasoby obliczeniowe</strong> i szybsze działanie całego systemu.</p>
             </section>
 
             <section id="background">
@@ -152,10 +148,10 @@
                   <div class="card">
                     <h3>Unseen Setting</h3>
                     <p>
-                      W trybie <strong>unseen</strong> system oceniany jest na podstawie próbek od mówców, którzy <strong>nie pojawili się w zbiorze treningowym</strong>. W naszym przypadku wydzielono czterech mówców (dwoje kobiet i dwóch mężczyzn) jako zbiór testowy, a pozostałe dane wykorzystano do treningu modelu.
+                      W trybie <strong>unseen</strong> system oceniany jest na podstawie próbek od mówców, którzy nie pojawili się w zbiorze treningowym. W naszym przypadku wydzielono czterech mówców (dwoje kobiet i dwóch mężczyzn) jako zbiór testowy, a pozostałe dane wykorzystano do treningu modelu.
                     </p>
                     <p>
-                      Taka konfiguracja pozwala sprawdzić <strong>zdolność modelu do uogólniania</strong> na wcześniej niewidzianych użytkowników — jest to kluczowe w przypadku systemów adaptacyjnych, których zadaniem jest rozpoznawanie mowy od nowych osób przy minimalnym nakładzie danych.
+                      Taka konfiguracja pozwala sprawdzić zdolność modelu do uogólniania na wcześniej niewidzianych użytkowników — jest to kluczowe w przypadku systemów adaptacyjnych, których zadaniem jest rozpoznawanie mowy od nowych osób przy minimalnym nakładzie danych.
                     </p>
                   </div>
               
@@ -165,32 +161,20 @@
                       W ustawieniu <strong>overlapped</strong> dane testowe pochodzą od tych samych mówców co dane treningowe, lecz zawierają inne wypowiedzi. Każdy mówca posiada zarówno przykłady w zbiorze treningowym, jak i w zbiorze testowym.
                     </p>
                     <p>
-                      Taki scenariusz pozwala ocenić, jak dobrze model potrafi rozpoznawać nowe zdania u <strong>znanych już mówców</strong>. Stanowi on prostsze zadanie niż tryb unseen, ale nadal wymaga generalizacji na poziomie wypowiedzi.
+                      Taki scenariusz pozwala ocenić, jak dobrze model potrafi rozpoznawać nowe zdania u znanych już mówców. Stanowi on prostsze zadanie niż tryb unseen, ale nadal wymaga generalizacji na poziomie wypowiedzi.
                     </p>
                   </div>
                 </div>
               
                 <p>
-                    Do naszych eksperymentów wykorzystano dane z <strong>GRID corpus</strong> – zbioru obejmującego ponad 30 tysięcy nagrań wideo z synchronizowanym dźwiękiem i transkrypcją, zawierającego wypowiedzi 34 mówców. Skupiliśmy się na ustawieniu <strong>unseen</strong>, które stanowi większe wyzwanie niż konfiguracja overlapped, ponieważ testowane są wypowiedzi od mówców niewystępujących w zbiorze treningowym. Pozwala to rzetelnie ocenić <strong>zdolność modelu do adaptacji do nowych użytkowników</strong>.
+                    Do naszych eksperymentów wykorzystano dane ze zbioru GRID obejmującego ponad 30 tysięcy nagrań wideo z synchronizowanym dźwiękiem i transkrypcją, zawierającego wypowiedzi 34 mówców. Skupiliśmy się na ustawieniu <strong>unseen</strong>, które stanowi większe wyzwanie niż konfiguracja overlapped, ponieważ testowane są wypowiedzi od mówców niewystępujących w zbiorze treningowym. Pozwala to rzetelnie ocenić zdolność modelu do adaptacji do nowych użytkowników.
                 </p>
               </section>
               
               <section id="metrics">
                 <h2>Metryka</h2>
                 <p>
-                  Word Error Rate to standardowa metryka w dziedzinie rozpoznawania mowy, która mierzy <strong>procent niepoprawnie rozpoznanych słów</strong> w stosunku do całkowitej liczby słów w referencyjnej transkrypcji. WER obliczany jest na podstawie trzech rodzajów błędów:
-                </p>
-              
-                <p>
-                  <strong>Substytucje (S)</strong> – liczba słów, które zostały zastąpione innymi słowami. Na przykład, gdy model przewiduje słowo "kot" zamiast "dom".
-                </p>
-              
-                <p>
-                  <strong>Delecje (D)</strong> – liczba słów z referencji, które nie zostały rozpoznane przez system. Słowa te są obecne w prawdziwej transkrypcji, ale brakuje ich w predykcji.
-                </p>
-              
-                <p>
-                  <strong>Insercje (I)</strong> – liczba dodatkowych słów, które model przewidział, ale nie występują w referencyjnej transkrypcji.
+                  Word Error Rate to standardowa metryka w dziedzinie rozpoznawania mowy, która mierzy <strong>procent niepoprawnie rozpoznanych słów</strong> w stosunku do całkowitej liczby słów w referencyjnej transkrypcji.
                 </p>
               
                 <div class="method-flow">
@@ -201,14 +185,26 @@
                   <p style="text-align: center; font-style: italic; color: var(--medium-gray);">
                     gdzie <strong>N</strong> to całkowita liczba słów w referencyjnej transkrypcji
                   </p>
+                  
+                  <p>
+                    <strong>Zastąpienia (S) – ang. substitutions</strong> – liczba słów, które zostały zastąpione innymi słowami. Na przykład, gdy model przewiduje słowo "kot" zamiast "dom".
+                  </p>
+                
+                  <p>
+                    <strong>Usunięcia (D) – ang. deletions</strong> – liczba słów z referencji, które nie zostały rozpoznane przez system. Słowa te są obecne w prawdziwej transkrypcji, ale brakuje ich w predykcji.
+                  </p>
+                
+                  <p>
+                    <strong>Wstawienia (I) – ang. insertions</strong> – liczba dodatkowych słów, które model przewidział, ale nie występują w referencyjnej transkrypcji.
+                  </p>
                 </div>
               
                 <p>
-                  W kontekście lipreadingu WER jest szczególnie istotny, ponieważ <strong>każde słowo ma znaczenie</strong> dla zrozumienia komunikatu. Niski WER oznacza, że system skutecznie rozpoznaje większość wypowiadanych słów, co przekłada się na praktyczną użyteczność w rzeczywistych zastosowaniach.
+                  W kontekście lipreadingu WER jest szczególnie istotny, ponieważ każde słowo ma znaczenie dla zrozumienia komunikatu. Niski WER oznacza, że system skutecznie rozpoznaje większość wypowiadanych słów, co przekłada się na praktyczną użyteczność w rzeczywistych zastosowaniach.
                 </p>
               
                 <p>
-                  Typowe wartości WER dla systemów lipreadingu wahają się od 20% do 80%, w zależności od złożoności zadania i jakości danych. <strong>Im niższy WER, tym lepszy system</strong> – wartość 0% oznaczałaby perfekcyjne rozpoznawanie wszystkich słów, podczas gdy WER powyżej 100% wskazuje na bardzo słabą wydajność systemu.
+                  Typowe wartości WER dla systemów lipreadingu wahają się od 20% do 80%, w zależności od złożoności zadania i jakości danych. Im niższy WER, tym lepszy system – wartość 0% oznaczałaby perfekcyjne rozpoznawanie wszystkich słów, podczas gdy WER powyżej 100% wskazuje na bardzo słabą wydajność systemu.
                 </p>
               </section>
               
@@ -228,7 +224,7 @@
                 </div>
               
                 <p>
-                  Przeprowadzone eksperymenty pokazują, że zastosowanie architektury opartej na hipersieci pozwala osiągnąć <strong>bezprecedensową skuteczność w scenariuszach few-shot lipreadingu</strong>. Osiągnięte wyniki wykazują wyraźną przewagę nad klasycznymi podejściami w kilku kluczowych obszarach:
+                  Przeprowadzone eksperymenty pokazują, że zastosowanie architektury opartej na hipersieci pozwala osiągnąć bezprecedensową skuteczność w scenariuszach few-shot lipreadingu. Osiągnięte wyniki wykazują wyraźną przewagę nad klasycznymi podejściami w kilku kluczowych obszarach:
                 </p>
               
                 <div class="grid">
