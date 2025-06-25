@@ -3,511 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <link rel="stylesheet" href="styles.css">
     <title>FLipNet: Few-Shot Learning for Lipreading</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-red: #dc2626;
-            --secondary-red: #ef4444;
-            --light-red: #fef2f2;
-            --dark-red: #991b1b;
-            --black: #0f0f0f;
-            --dark-gray: #1f1f1f;
-            --medium-gray: #404040;
-            --light-gray: #f8f9fa;
-            --white: #ffffff;
-            --border-light: #e5e7eb;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.6;
-            color: var(--black);
-            background: var(--white);
-            font-weight: 400;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: var(--white);
-            box-shadow: var(--shadow-lg);
-            min-height: 100vh;
-        }
-
-        header {
-            background: var(--dark-gray);
-            color: var(--white);
-            padding: 4rem 2rem;
-            text-align: center;
-            position: relative;
-            border-bottom: 1px solid var(--border-light);
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: var(--white);
-            position: relative;
-        }
-
-        h1::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 4px;
-            background: var(--primary-red);
-            margin: 1.5rem auto 0;
-            border-radius: 2px;
-        }
-
-        .subtitle {
-            font-size: 1.125rem;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 400;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        nav {
-            background: var(--white);
-            padding: 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--border-light);
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-
-        nav.scrolled {
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .nav-container {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 1rem 1rem 1rem 1rem;
-            background: none;
-            border: none;
-            position: absolute;
-            right: 0.0rem;
-            top: 0;
-            transform: none;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: var(--black);
-            margin: 3px 0;
-            transition: 0.3s;
-            border-radius: 2px;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(-45deg) translate(-5px, 6px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(45deg) translate(-5px, -6px);
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 0;
-            padding: 0;
-            transition: all 0.3s ease;
-        }
-
-        nav a {
-            color: var(--black);
-            text-decoration: none;
-            padding: 1rem 1.5rem;
-            display: block;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            border-bottom: 3px solid transparent;
-            font-size: 0.9rem;
-            letter-spacing: 0.01em;
-        }
-
-        nav.scrolled a {
-            padding: 0.75rem 1.25rem;
-            font-size: 0.85rem;
-        }
-
-        nav a:hover {
-            color: var(--primary-red);
-            border-bottom-color: var(--primary-red);
-            background: var(--light-red);
-        }
-
-        main {
-            padding: 4rem 2rem;
-        }
-
-        section {
-            margin-bottom: 6rem;
-            padding: 0;
-        }
-
-        section:last-child {
-            margin-bottom: 2rem;
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            color: var(--black);
-            margin-bottom: 3rem;
-            text-align: center;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            position: relative;
-        }
-
-        h2::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 4px;
-            background: var(--primary-red);
-            margin: 1.5rem auto 0;
-            border-radius: 2px;
-        }
-
-        p {
-            margin-bottom: 1.5rem;
-            font-size: 1.125rem;
-            line-height: 1.75;
-            color: var(--medium-gray);
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .image-container {
-            text-align: center;
-            margin: 3rem 0;
-        }
-
-        .image-container img {
-            max-width: 70%;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border-light);
-        }
-
-        .image-container.large img {
-            max-width: 80%;
-            margin-left: -10%;
-            transform: scale(1.1);
-        }
-
-        .image-container.small img {
-            max-width: 25%;
-            margin: 0 auto;
-            display: block;
-        }
-
-        .image-caption {
-            font-style: italic;
-            color: var(--medium-gray);
-            margin-top: 1rem;
-            font-size: 0.95rem;
-            font-weight: 400;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .card {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary-red);
-        }
-
-        .card h3 {
-            color: var(--black);
-            margin-bottom: 1rem;
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .card p {
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 0;
-        }
-
-        .highlight {
-            background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
-            color: var(--white);
-            padding: 3rem 2rem;
-            border-radius: 16px;
-            margin: 3rem 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .highlight::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></svg>') repeat;
-            opacity: 0.3;
-        }
-
-        .highlight h3 {
-            font-size: 1.75rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
-        }
-
-        .highlight p {
-            font-size: 1.125rem;
-            position: relative;
-            z-index: 1;
-            color: var(--white);
-            opacity: 0.95;
-        }
-
-        .method-flow {
-            background: var(--light-gray);
-            padding: 3rem;
-            border-radius: 16px;
-            margin: 3rem 0;
-            border: 1px solid var(--border-light);
-        }
-
-        .method-flow h3 {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            color: var(--black);
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .method-flow ol {
-            list-style: none;
-            counter-reset: step-counter;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .method-flow li {
-            counter-increment: step-counter;
-            margin-bottom: 1.5rem;
-            padding-left: 4rem;
-            position: relative;
-            font-size: 1.125rem;
-            line-height: 1.6;
-            color: var(--medium-gray);
-        }
-
-        .method-flow li:last-child {
-            margin-bottom: 0;
-        }
-
-        .method-flow li::before {
-            content: counter(step-counter);
-            position: absolute;
-            left: 0;
-            top: 0;
-            background: var(--primary-red);
-            color: var(--white);
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .method-flow strong {
-            color: var(--black);
-            font-weight: 600;
-        }
-
-        footer {
-            background: var(--black);
-            color: var(--white);
-            text-align: center;
-            padding: 3rem 2rem;
-            font-size: 0.95rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            header {
-                padding: 3rem 1rem;
-            }
-            
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
-            }
-            
-            h2 {
-                font-size: 2rem;
-            }
-            
-            .hamburger {
-                display: flex;
-            }
-            
-            nav ul {
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: var(--white);
-                box-shadow: var(--shadow-lg);
-                border-top: 1px solid var(--border-light);
-                transform: translateY(-100%);
-                opacity: 0;
-                visibility: hidden;
-                transition: all 0.3s ease;
-                max-height: 0;
-                overflow: hidden;
-            }
-            
-            nav ul.active {
-                transform: translateY(0);
-                opacity: 1;
-                visibility: visible;
-                max-height: 500px;
-            }
-            
-            nav a {
-                padding: 1rem 1.5rem;
-                width: 100%;
-                text-align: left;
-                border-bottom: none;
-                border-left: 3px solid transparent;
-                font-size: 0.9rem;
-                border-bottom: 1px solid var(--border-light);
-            }
-
-            nav a:last-child {
-                border-bottom: none;
-            }
-
-            nav.scrolled a {
-                padding: 1rem 1.5rem;
-                font-size: 0.9rem;
-            }
-            
-            nav a:hover {
-                border-left-color: var(--primary-red);
-                border-bottom-color: transparent;
-            }
-            
-            main {
-                padding: 2rem 1rem;
-            }
-            
-            .grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .method-flow {
-                padding: 2rem 1.5rem;
-            }
-            
-            .method-flow li {
-                padding-left: 3.5rem;
-                font-size: 1rem;
-            }
-            
-            .method-flow li::before {
-                width: 2rem;
-                height: 2rem;
-                font-size: 0.9rem;
-            }
-            
-            .highlight {
-                padding: 2rem 1.5rem;
-            }
-            
-            .image-container.large img {
-                max-width: 100%;
-                margin-left: 0;
-                transform: none;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 2rem 1rem;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .subtitle {
-                font-size: 0.95rem;
-            }
-            
-            p {
-                font-size: 1rem;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -530,6 +31,7 @@
                     <li><a href="#background">Uczenie przy małej liczbie przykładów</a></li>
                     <li><a href="#settings">Ustawienia eksperymentów</a></li>
                     <li><a href="#method">Metoda</a></li>
+                    <li><a href="#metrics">Metryka</a></li>
                     <li><a href="#results">Wyniki</a></li>
                     <li><a href="#team">Zespół</a></li>
                 </ul>
@@ -539,7 +41,7 @@
         <main>
             <section id="introduction">
                 <h2>Wprowadzenie</h2>
-                <p><strong>Odczytywanie mowy z ruchu warg</strong> (ang. <em>lipreading</em>) to proces rozpoznawania wypowiedzi na podstawie ruchów ust mówcy. Choć dla większości z nas jest to umiejętność wspomagająca słuch, w sytuacjach, gdy dźwięk jest niedostępny lub zakłócony, staje się ona kluczowa. Technologia lipreadingu ma ogromny potencjał – może wspierać <strong>komunikację w hałaśliwym otoczeniu</strong>, a także umożliwiać porozumiewanie się <strong>osobom, które nie są w stanie mówić</strong>, np. pacjentom po operacjach lub z zaburzeniami neurologicznymi.</p>
+                <p><strong>Odczytywanie mowy z ruchu warg</strong> (ang. <em>lipreading</em>) to proces rozpoznawania wypowiedzi na podstawie ruchów ust mówcy. Choć dla większości z nas jest to umiejętność wspomagająca słuch, w sytuacjach, gdy dźwięk jest niedostępny lub zakłócony, staje się ona kluczowa. Technologia lipreadingu ma ogromny potencjał – może wspierać <strong>komunikację w hałaśliwym otoczeniu</strong>, a także umożliwiać porozumiewanie się <strong>osobom, które nie są w stanie komunikować się werbalnie</strong>, np. pacjenci po operacjach lub z zaburzeniami neurologicznymi.</p>
               
                 <p>W naszej pracy prezentujemy <strong>nowatorską architekturę do odczytywania mowy z ruchu warg</strong>. Nasze podejście wykorzystuje <em>hipersieci</em> (ang. <em>hypernetworks</em>) do dynamicznej aktualizacji wag głównego modelu, co umożliwia <strong>dostosowanie się do wcześniej niewidzianych mówców</strong>. Dzięki temu model potrafi efektywnie przystosować się do indywidualnych cech mimiki konkretnej osoby, co przekłada się na wyższą dokładność predykcji.</p>
               
@@ -608,8 +110,8 @@
                 <div class="method-flow">
                   <h3>Przebieg działania architektury</h3>
                   <ol>
-                    <li><strong>Przetwarzanie zbioru wsparcia:</strong> Próbki ze zbioru wsparcia są wprowadzane do specjalistycznego ekstraktora cech</li>
-                    <li><strong>Ekstrakcja cech czasowo-przestrzennych:</strong> Ekstraktor wykorzystuje konwolucje czasowo-przestrzenne w połączeniu z rekurencyjnymi jednostkami GRU, aby uchwycić zarówno wzorce ruchu warg, jak i dynamikę czasową</li>
+                    <li><strong>Przetwarzanie zbioru wsparcia:</strong> Próbki ze zbioru wsparcia są wprowadzane do ekstraktora cech</li>
+                    <li><strong>Ekstrakcja cech czasowo-przestrzennych:</strong> Ekstraktor wykorzystuje konwolucje czasowo-przestrzenne (ang. <em>spatiotemporal convolutions</em>) w połączeniu z rekurencyjnymi jednostkami GRU, aby uchwycić zarówno wzorce ruchu warg, jak i dynamikę czasową</li>
                     <li><strong>Generowanie osadzeń (embeddingów):</strong> Wyodrębnione cechy są przekształcane w bogate reprezentacje, które uchwytują charakterystyki konkretnego mówcy</li>
                     <li><strong>Fuzja z wykorzystaniem mechanizmu cross-attention:</strong> Embeddingi są łączone z etykietami przy użyciu mechanizmu uwagi krzyżowej, co pozwala uzyskać kontekstowo bogate reprezentacje</li>
                     <li><strong>Przetwarzanie przez hipersieć:</strong> Fuzje reprezentacji służą jako wejście do hipersieci, która generuje dostosowane do mówcy aktualizacje wag</li>
@@ -650,7 +152,7 @@
                   <div class="card">
                     <h3>Unseen Setting</h3>
                     <p>
-                      W trybie <strong>unseen</strong> system oceniany jest na podstawie próbek od mówców, którzy <strong>nie pojawili się w zbiorze treningowym</strong>. W naszym przypadku wydzielono czterech mówców (dwóch kobiet i dwóch mężczyzn) jako zbiór testowy, a pozostałe dane wykorzystano do treningu modelu.
+                      W trybie <strong>unseen</strong> system oceniany jest na podstawie próbek od mówców, którzy <strong>nie pojawili się w zbiorze treningowym</strong>. W naszym przypadku wydzielono czterech mówców (dwoje kobiet i dwóch mężczyzn) jako zbiór testowy, a pozostałe dane wykorzystano do treningu modelu.
                     </p>
                     <p>
                       Taka konfiguracja pozwala sprawdzić <strong>zdolność modelu do uogólniania</strong> na wcześniej niewidzianych użytkowników — jest to kluczowe w przypadku systemów adaptacyjnych, których zadaniem jest rozpoznawanie mowy od nowych osób przy minimalnym nakładzie danych.
@@ -669,7 +171,44 @@
                 </div>
               
                 <p>
-                    Do naszych eksperymentów wykorzystano dane z <strong>GRID corpus</strong> – zbioru obejmującego ponad 30 tysięcy nagrań wideo z synchronizowanym dźwiękiem i transkrypcją, zawierającego wypowiedzi 34 mówców. Skupiliśmy się wyłącznie na ustawieniu <strong>unseen</strong>, które stanowi większe wyzwanie niż konfiguracja overlapped, ponieważ testowane są wypowiedzi od mówców niewystępujących w zbiorze treningowym. Pozwala to rzetelnie ocenić <strong>zdolność modelu do adaptacji do nowych użytkowników</strong>.
+                    Do naszych eksperymentów wykorzystano dane z <strong>GRID corpus</strong> – zbioru obejmującego ponad 30 tysięcy nagrań wideo z synchronizowanym dźwiękiem i transkrypcją, zawierającego wypowiedzi 34 mówców. Skupiliśmy się na ustawieniu <strong>unseen</strong>, które stanowi większe wyzwanie niż konfiguracja overlapped, ponieważ testowane są wypowiedzi od mówców niewystępujących w zbiorze treningowym. Pozwala to rzetelnie ocenić <strong>zdolność modelu do adaptacji do nowych użytkowników</strong>.
+                </p>
+              </section>
+              
+              <section id="metrics">
+                <h2>Metryka</h2>
+                <p>
+                  Word Error Rate to standardowa metryka w dziedzinie rozpoznawania mowy, która mierzy <strong>procent niepoprawnie rozpoznanych słów</strong> w stosunku do całkowitej liczby słów w referencyjnej transkrypcji. WER obliczany jest na podstawie trzech rodzajów błędów:
+                </p>
+              
+                <p>
+                  <strong>Substytucje (S)</strong> – liczba słów, które zostały zastąpione innymi słowami. Na przykład, gdy model przewiduje słowo "kot" zamiast "dom".
+                </p>
+              
+                <p>
+                  <strong>Delecje (D)</strong> – liczba słów z referencji, które nie zostały rozpoznane przez system. Słowa te są obecne w prawdziwej transkrypcji, ale brakuje ich w predykcji.
+                </p>
+              
+                <p>
+                  <strong>Insercje (I)</strong> – liczba dodatkowych słów, które model przewidział, ale nie występują w referencyjnej transkrypcji.
+                </p>
+              
+                <div class="method-flow">
+                  <h3>Wzór na WER</h3>
+                  <div style="text-align: center; font-size: 1.25rem; margin: 2rem 0; font-weight: 600; color: var(--black);">
+                    \( WER = \frac{S + D + I}{N} \times 100\% \)
+                  </div>
+                  <p style="text-align: center; font-style: italic; color: var(--medium-gray);">
+                    gdzie <strong>N</strong> to całkowita liczba słów w referencyjnej transkrypcji
+                  </p>
+                </div>
+              
+                <p>
+                  W kontekście lipreadingu WER jest szczególnie istotny, ponieważ <strong>każde słowo ma znaczenie</strong> dla zrozumienia komunikatu. Niski WER oznacza, że system skutecznie rozpoznaje większość wypowiadanych słów, co przekłada się na praktyczną użyteczność w rzeczywistych zastosowaniach.
+                </p>
+              
+                <p>
+                  Typowe wartości WER dla systemów lipreadingu wahają się od 20% do 80%, w zależności od złożoności zadania i jakości danych. <strong>Im niższy WER, tym lepszy system</strong> – wartość 0% oznaczałaby perfekcyjne rozpoznawanie wszystkich słów, podczas gdy WER powyżej 100% wskazuje na bardzo słabą wydajność systemu.
                 </p>
               </section>
               
@@ -693,21 +232,22 @@
                 </p>
               
                 <div class="grid">
-                  <div class="card">
-                    <h3>Szybkość adaptacji</h3>
-                    <p>Model bardzo szybko dostosowuje się do nowego mówcy, wykorzystując jedynie kilka przykładów. Czas wymagany na personalizację został skrócony nawet o 85% w porównaniu do tradycyjnego fine-tuningu.</p>
+                    <div class="card">
+                      <h3>Szybka adaptacja</h3>
+                      <p>Model potrafi dostosować się do nowego mówcy na podstawie ograniczonej liczby przykładów, co sprawia, że proces personalizacji jest znacznie bardziej efektywny niż w tradycyjnych podejściach.</p>
+                    </div>
+                  
+                    <div class="card">
+                      <h3>Większa dokładność</h3>
+                      <p>Zaproponowana architektura poprawia jakość rozpoznawania mowy wizualnej w przypadku różnych użytkowników, lepiej radząc sobie z indywidualnymi cechami twarzy oraz sposobem artykulacji.</p>
+                    </div>
+                  
+                    <div class="card">
+                      <h3>Ogólność rozwiązania</h3>
+                      <p>Model wykazuje dobrą skuteczność również w przypadku danych pochodzących od wcześniej niewidzianych mówców, co wskazuje na jego zdolność do uogólniania zdobytej wiedzy.</p>
+                    </div>
                   </div>
-              
-                  <div class="card">
-                    <h3>Poprawa dokładności</h3>
-                    <p>Architektura zapewnia znaczną poprawę dokładności dla zróżnicowanych mówców, szczególnie dobrze radząc sobie z różnicami w strukturze twarzy i stylu artykulacji.</p>
-                  </div>
-              
-                  <div class="card">
-                    <h3>Zdolność generalizacji</h3>
-                    <p>Wysoka skuteczność na danych od niewidzianych wcześniej mówców potwierdza skuteczność naszego podejścia opartego na hipersieci w tworzeniu systemów o dużej zdolności generalizacji.</p>
-                  </div>
-                </div>
+                  
               
                 <p>
                   Wyniki te wskazują, że FLipNet ustanawia nowy punkt odniesienia dla systemów adaptacyjnego lipreadingu. Połączenie wysokiej dokładności, szybkiej adaptacji oraz odporności na zmiany między mówcami czyni go atrakcyjnym rozwiązaniem dla rzeczywistych zastosowań, w których wymagana jest efektywna personalizacja.
@@ -715,7 +255,7 @@
               
                 <div class="image-container">
                   <img src="assets/qualitive.webp" alt="Analiza jakościowa wyników" />
-                  <p class="image-caption">Rysunek 5: Analiza jakościowa predykcji modelu w różnych scenariuszach</p>
+                  <p class="image-caption">Rysunek 5: Analiza jakościowa predykcji modelu.</p>
                 </div>
               </section>              
 
