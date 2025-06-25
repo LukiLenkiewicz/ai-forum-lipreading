@@ -171,7 +171,7 @@
         }
 
         .image-container img {
-            max-width: 100%;
+            max-width: 70%;
             height: auto;
             border-radius: 12px;
             box-shadow: var(--shadow-lg);
@@ -179,9 +179,15 @@
         }
 
         .image-container.large img {
-            max-width: 120%;
+            max-width: 80%;
             margin-left: -10%;
             transform: scale(1.1);
+        }
+
+        .image-container.small img {
+            max-width: 25%;
+            margin: 0 auto;
+            display: block;
         }
 
         .image-caption {
@@ -562,7 +568,7 @@
                 <h2>Method</h2>
                 
                 <h3 style="font-size: 1.75rem; color: var(--black); margin-bottom: 2rem; text-align: center; font-weight: 600;">Architecture Overview</h3>
-                <div class="image-container">
+                <div class="image-container large">
                     <img src="assets/FLipNet.png" alt="Architecture Overview" />
                     <p class="image-caption">Figure 2: Complete architecture overview of our FLipNet system</p>
                 </div>
@@ -590,7 +596,7 @@
                 </p>
 
                 <h3 style="font-size: 1.5rem; color: var(--black); margin: 3rem 0 1.5rem 0; font-weight: 600;">Hypernetwork Architecture</h3>
-                <div class="image-container">
+                <div class="image-container small">
                     <img src="assets/hypernetwork.png" alt="Hypernetwork Architecture" />
                     <p class="image-caption">Figure 4: Hypernetwork architecture for dynamic weight generation</p>
                 </div>
