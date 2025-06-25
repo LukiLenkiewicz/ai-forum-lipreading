@@ -96,13 +96,53 @@
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
         }
 
+        .nav-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 1rem 1rem 1rem 1rem;
+            background: none;
+            border: none;
+            position: absolute;
+            right: 0.0rem;
+            top: 0;
+            transform: none;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--black);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
         nav ul {
             list-style: none;
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            max-width: 800px;
-            margin: 0 auto;
+            margin: 0;
+            padding: 0;
             transition: all 0.3s ease;
         }
 
@@ -363,27 +403,55 @@
                 font-size: 2rem;
             }
             
+            .hamburger {
+                display: flex;
+            }
+            
             nav ul {
                 flex-direction: column;
-                align-items: center;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                box-shadow: var(--shadow-lg);
+                border-top: 1px solid var(--border-light);
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                max-height: 0;
+                overflow: hidden;
+            }
+            
+            nav ul.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+                max-height: 500px;
             }
             
             nav a {
-                padding: 0.75rem 1rem;
+                padding: 1rem 1.5rem;
                 width: 100%;
-                text-align: center;
+                text-align: left;
                 border-bottom: none;
-                border-right: 3px solid transparent;
-                font-size: 0.85rem;
+                border-left: 3px solid transparent;
+                font-size: 0.9rem;
+                border-bottom: 1px solid var(--border-light);
+            }
+
+            nav a:last-child {
+                border-bottom: none;
             }
 
             nav.scrolled a {
-                padding: 0.5rem 1rem;
-                font-size: 0.8rem;
+                padding: 1rem 1.5rem;
+                font-size: 0.9rem;
             }
             
             nav a:hover {
-                border-right-color: var(--primary-red);
+                border-left-color: var(--primary-red);
                 border-bottom-color: transparent;
             }
             
@@ -449,16 +517,23 @@
         </header>
 
         <nav id="navbar">
-            <ul>
-                <li><a href="#introduction">Introduction</a></li>
-                <li><a href="#goal">Goal</a></li>
-                <li><a href="#preprocessing">Data Preprocessing</a></li>
-                <li><a href="#background">Few-Shot Learning</a></li>
-                <li><a href="#settings">Experimental Settings</a></li>
-                <li><a href="#method">Method</a></li>
-                <li><a href="#results">Results</a></li>
-                <li><a href="#team">Team</a></li>
-            </ul>
+            <div class="nav-container">
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul id="nav-menu">
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#goal">Goal</a></li>
+                    <li><a href="#preprocessing">Data Preprocessing</a></li>
+                    <li><a href="#background">Few-Shot Learning</a></li>
+                    <li><a href="#settings">Experimental Settings</a></li>
+                    <li><a href="#method">Method</a></li>
+                    <li><a href="#results">Results</a></li>
+                    <li><a href="#team">Team</a></li>
+                </ul>
+            </div>
         </nav>
 
         <main>
@@ -708,6 +783,31 @@
     </div>
 
     <script>
+        // Hamburger menu functionality
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!hamburger.contains(event.target) && !navMenu.contains(event.target)) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
+        });
+
         // Add scroll effect to navbar
         window.addEventListener('scroll', function() {
             const navbar = document.getElementById('navbar');
