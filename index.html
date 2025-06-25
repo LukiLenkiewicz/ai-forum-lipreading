@@ -538,236 +538,201 @@
 
         <main>
             <section id="introduction">
-                <h2>Introduction</h2>
-                <p>
-                    Lipreading, also known as speechreading, is the ability to understand spoken language by visually interpreting the movements of the lips, face, and tongue. This skill is particularly crucial in the healthcare sector, where effective communication can be a matter of life and death. For patients who are unable to speak due to various medical conditions—such as those recovering from stroke, suffering from neurodegenerative diseases, or undergoing medical procedures that affect vocal ability—lipreading technology offers a vital communication bridge.
-                </p>
-                <p>
-                    In healthcare environments, patients who cannot vocalize their needs, pain levels, or concerns face significant challenges in receiving appropriate care. Traditional communication methods may be inadequate or impossible to use. Automated lipreading systems can revolutionize patient care by enabling healthcare providers to understand non-verbal patients, ensuring their needs are met promptly and accurately. This technology not only improves patient outcomes but also enhances the quality of care and reduces the psychological stress experienced by patients who struggle to communicate.
-                </p>
-                <p>
-                    The applications extend beyond individual patient care to include emergency situations, intensive care units, and rehabilitation settings where quick and accurate communication interpretation can significantly impact treatment decisions and patient wellbeing.
-                </p>
-            </section>
-
-            <section id="goal">
-                <h2>Goal</h2>
-                <div class="highlight">
-                    <h3>Revolutionary Architecture Development</h3>
-                    <p>
-                        Our primary objective is the development of a novel architecture that enables rapid weight adaptation through the innovative application of hypernetworks, allowing the system to quickly adapt to new speakers not seen during training.
-                    </p>
-                </div>
-                <p>
-                    Traditional lipreading systems face a significant challenge: they struggle to generalize to new speakers whose lip movements, facial structures, and speaking patterns differ from those in the training dataset. Our breakthrough approach addresses this limitation by developing an architecture capable of quick weight updates through hypernetwork technology.
-                </p>
-                <p>
-                    The core innovation lies in the hypernetwork's ability to generate speaker-specific weight modifications in real-time, enabling the model to adapt to previously unseen individuals with minimal additional data. This represents a paradigm shift from static models that require extensive retraining for new speakers to dynamic systems that can rapidly personalize their understanding.
-                </p>
-                <p>
-                    This advancement is particularly crucial for healthcare applications, where the system must quickly adapt to new patients with varying speech patterns, facial structures, and medical conditions that may affect their lip movements.
-                </p>
-            </section>
+                <h2>Wprowadzenie</h2>
+                <p><strong>Odczytywanie mowy z ruchu warg</strong> (ang. <em>lipreading</em>) to proces rozpoznawania wypowiedzi na podstawie ruchów ust mówcy. Choć dla większości z nas jest to umiejętność wspomagająca słuch, w sytuacjach, gdy dźwięk jest niedostępny lub zakłócony, staje się ona kluczowa. Technologia lipreadingu ma ogromny potencjał – może wspierać <strong>komunikację w hałaśliwym otoczeniu</strong>, a także umożliwiać porozumiewanie się <strong>osobom, które nie są w stanie mówić</strong>, np. pacjentom po operacjach lub z zaburzeniami neurologicznymi.</p>
+              
+                <p>W naszej pracy prezentujemy <strong>nowatorską architekturę do odczytywania mowy z ruchu warg</strong>. Nasze podejście wykorzystuje <em>hipersieci</em> (ang. <em>hypernetworks</em>) do dynamicznej aktualizacji wag głównego modelu, co umożliwia <strong>dostosowanie się do wcześniej niewidzianych mówców</strong>. Dzięki temu model potrafi efektywnie przystosować się do indywidualnych cech mimiki konkretnej osoby, co przekłada się na wyższą dokładność predykcji.</p>
+              
+                <p>Nasze rozwiązanie zostało zweryfikowane na zbiorze danych <strong>GRID</strong>, będącym standardem w badaniach nad lipreadingiem, i osiąga <strong>wyniki na poziomie state-of-the-art</strong>. Otwiera to nowe możliwości zastosowań – od <strong>cichych interfejsów głosowych</strong>, przez <strong>rozpoznawanie mowy w hałaśliwym otoczeniu</strong>, aż po <strong>technologie wspomagające osoby niemówiące</strong>.</p>
+              </section>              
 
             <section id="preprocessing">
-                <h2>Data Preprocessing</h2>
+                <h2>Przygotowanie danych</h2>
                 <div class="image-container">
                     <img src="assets/preprocessing.webp" alt="Data Preprocessing Pipeline" />
                     <p class="image-caption">Figure 1: Data preprocessing pipeline for lipreading input preparation</p>
                 </div>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                </p>
-                <p>
-                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
-                </p>
+                <p>W celu zwiększenia skuteczności modelu oraz redukcji nieistotnych informacji wizualnych, zastosowaliśmy preprocessing nagrań wideo z wykorzystaniem bibliotek <strong>OpenCV</strong> oraz <strong>MediaPipe</strong>. Dla każdego nagrania automatycznie wykrywaliśmy twarz, a następnie wycinaliśmy region odpowiadający <strong>ustom mówcy</strong>.</p>
+              
+                <p>Takie podejście pozwala usunąć zbędny szum z wejścia do modelu, koncentrując się wyłącznie na istotnych sygnałach wizualnych związanych z artykulacją. Dodatkowo, <strong>zmniejszenie rozmiaru wejściowych danych</strong> przekłada się na <strong>niższe zapotrzebowanie na zasoby obliczeniowe</strong> i szybsze działanie całego systemu.</p>
             </section>
 
             <section id="background">
                 <h2>Few-Shot Learning</h2>
                 <p>
-                    Few-shot learning is a machine learning paradigm designed to enable models to learn new tasks or adapt to new data with only a few training examples. This approach is particularly valuable in scenarios where collecting large amounts of labeled data is expensive, time-consuming, or impractical—such as in personalized healthcare applications.
+                  Few-shot learning to paradygmat uczenia maszynowego, który umożliwia modelom przyswajanie nowych zadań lub dostosowywanie się do nowych danych przy użyciu jedynie kilku przykładów uczących. Podejście to jest szczególnie przydatne w sytuacjach, gdy zebranie dużej ilości oznaczonych danych jest kosztowne, czasochłonne lub trudne do zrealizowania.
                 </p>
-                
+              
                 <p>
-                    In the context of lipreading, few-shot learning allows our system to quickly adapt to new speakers using only a small number of examples. This is accomplished through the concept of support and query sets, which form the foundation of few-shot learning methodology.
+                  W kontekście odczytywania mowy z ruchu warg, few-shot learning pozwala naszemu systemowi szybko przystosować się do nowego mówcy, korzystając z ograniczonej liczby przykładów. Realizujemy to poprzez wykorzystanie koncepcji zbioru wsparcia (<em>support set</em>) i zbioru zapytań (<em>query set</em>), które stanowią fundament tej metodyki.
                 </p>
-
+              
                 <div class="grid">
-                    <div class="card">
-                        <h3>Support Set</h3>
-                        <div class="image-container">
-                            <img src="assets/support.webp" alt="Support Set Examples" />
-                            <p class="image-caption">Examples of support set samples used for speaker adaptation</p>
-                        </div>
-                        <p>
-                            The support set contains a small number of labeled examples from a new speaker. These samples provide the model with essential information about the speaker's unique characteristics, including lip movement patterns, facial structure, and speaking style. Our hypernetwork uses these examples to generate speaker-specific weight adaptations.
-                        </p>
+                  <div class="card">
+                    <h3>Zbiór wsparcia (Support Set)</h3>
+                    <div class="image-container">
+                      <img src="assets/support.webp" alt="Przykłady ze zbioru wsparcia" />
+                      <p class="image-caption">Przykłady używane do dostosowania modelu do nowego mówcy</p>
                     </div>
-
-                    <div class="card">
-                        <h3>Query Set</h3>
-                        <div class="image-container">
-                            <img src="assets/query.webp" alt="Query Set Examples" />
-                            <p class="image-caption">Query set samples for testing model adaptation</p>
-                        </div>
-                        <p>
-                            The query set consists of unlabeled samples from the same speaker that the model must classify or predict after adaptation. This represents the real-world scenario where the system encounters new utterances from a speaker it has just learned to recognize through the support set.
-                        </p>
-                    </div>
-                </div>
-
-                <p>
-                    The few-shot learning paradigm is particularly well-suited for lipreading applications in healthcare, where each patient represents a unique "task" requiring rapid adaptation. Rather than requiring extensive training data from each patient, our system can quickly personalize itself using just a few examples, making it practical for real-world deployment in clinical settings.
-                </p>
-            </section>
-
-            <section id="settings">
-                <h2>Experimental Settings</h2>
-                
-                <div class="grid">
-                    <div class="card">
-                        <h3>Unseen Setting</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        </p>
-                        <p>
-                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
-                        </p>
-                    </div>
-
-                    <div class="card">
-                        <h3>Overlapped Setting</h3>
-                        <p>
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident. Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
-                        </p>
-                        <p>
-                            Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus.
-                        </p>
-                    </div>
-                </div>
-
-                <p>
-                    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
-                </p>
-            </section>
-
-            <section id="method">
-                <h2>Method</h2>
-                
-                <h3 style="font-size: 1.75rem; color: var(--black); margin-bottom: 2rem; text-align: center; font-weight: 600;">Architecture Overview</h3>
-                <div class="image-container large">
-                    <img src="assets/FLipNet.png" alt="Architecture Overview" />
-                    <p class="image-caption">Figure 2: Complete architecture overview of our FLipNet system</p>
-                </div>
-                
-                <div class="method-flow">
-                    <h3>Architecture Pipeline</h3>
-                    <ol>
-                        <li><strong>Support Set Processing:</strong> Samples from the support set are fed through our specialized feature extractor</li>
-                        <li><strong>Spatiotemporal Feature Extraction:</strong> The feature extractor utilizes spatiotemporal convolution combined with Gated Recurrent Units (GRU) to capture both spatial lip movement patterns and temporal dynamics</li>
-                        <li><strong>Embedding Generation:</strong> The extracted features are transformed into rich embeddings that capture speaker-specific characteristics</li>
-                        <li><strong>Cross-Attention Fusion:</strong> The embeddings are merged with ground truth labels using a cross-attention mechanism, creating contextually aware representations</li>
-                        <li><strong>Hypernetwork Processing:</strong> The fused representations serve as input to our hypernetwork, which generates speaker-specific weight updates</li>
-                        <li><strong>Dynamic Weight Adaptation:</strong> The hypernetwork generates weight updates for the linear prediction layer, adapting the model to the specific speaker</li>
-                        <li><strong>Prediction:</strong> The updated linear layer processes query samples to predict what the user has said</li>
-                    </ol>
-                </div>
-
-                <h3 style="font-size: 1.5rem; color: var(--black); margin: 3rem 0 1.5rem 0; font-weight: 600;">Cross-Attention Mechanism</h3>
-                <div class="image-container">
-                    <img src="assets/cross_attention.png" alt="Cross-Attention Processing" />
-                    <p class="image-caption">Figure 3: Cross-attention mechanism for embedding fusion</p>
-                </div>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
-
-                <h3 style="font-size: 1.5rem; color: var(--black); margin: 3rem 0 1.5rem 0; font-weight: 600;">Hypernetwork Architecture</h3>
-                <div class="image-container small">
-                    <img src="assets/hypernetwork.png" alt="Hypernetwork Architecture" />
-                    <p class="image-caption">Figure 4: Hypernetwork architecture for dynamic weight generation</p>
-                </div>
-                <p>
-                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident. Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.
-                </p>
-                <p>
-                    Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.
-                </p>
-
-                <p>
-                    This architecture elegantly combines the power of spatiotemporal feature learning with the adaptive capabilities of hypernetworks. The spatiotemporal convolution captures the essential visual patterns of lip movements, while the GRU component models the temporal dependencies critical for understanding speech sequences. The cross-attention mechanism ensures that the hypernetwork receives contextually rich information, enabling it to generate highly effective weight modifications for speaker adaptation.
-                </p>
-            </section>
-
-            <section id="results">
-                <h2>Results</h2>
-                <div class="highlight">
-                    <h3>State-of-the-Art Performance</h3>
                     <p>
-                        Our FLipNet architecture represents the current state-of-the-art in lipreading technology, significantly outperforming existing solutions across multiple evaluation metrics.
+                      Zbiór wsparcia zawiera niewielką liczbę oznaczonych przykładów od nowego mówcy. Próbki te dostarczają modelowi kluczowych informacji o indywidualnych cechach użytkownika, takich jak wzorce ruchu warg, struktura twarzy czy styl artykulacji. Nasza hipersieć wykorzystuje te dane do wygenerowania odpowiednio dostosowanych wag modelu.
                     </p>
+                  </div>
+              
+                  <div class="card">
+                    <h3>Zbiór zapytań (Query Set)</h3>
+                    <div class="image-container">
+                      <img src="assets/query.webp" alt="Przykłady ze zbioru zapytań" />
+                      <p class="image-caption">Przykłady służące do oceny skuteczności adaptacji modelu</p>
+                    </div>
+                    <p>
+                      Zbiór zapytań składa się z nieoznaczonych próbek tego samego mówcy, które model musi rozpoznać po dokonaniu adaptacji. Taki schemat odzwierciedla rzeczywisty scenariusz, w którym system napotyka nowe wypowiedzi osoby, do której dopiero co został dostosowany.
+                    </p>
+                  </div>
                 </div>
-
-                <div class="image-container">
-                    <img src="assets/results.webp" alt="Performance Results" />
-                    <p class="image-caption">Comprehensive performance comparison showing superior results of our approach</p>
-                </div>
-
+              
                 <p>
-                    Our experimental evaluation demonstrates that the hypernetwork-based architecture achieves unprecedented performance in few-shot lipreading scenarios. The results show substantial improvements over traditional approaches in several key areas:
+                  Few-shot learning idealnie sprawdza się w zadaniach, w których każdy użytkownik stanowi osobny przypadek wymagający szybkiego dopasowania. Zamiast trenować model na dużych zbiorach danych dla każdego mówcy, nasz system potrafi się skutecznie spersonalizować na podstawie zaledwie kilku przykładów, co czyni go praktycznym w zastosowaniach wymagających elastyczności i niskich kosztów przygotowania danych.
                 </p>
+              </section>
 
+              <section id="method">
+                <h2>Metoda</h2>
+              
+                <h3 style="font-size: 1.75rem; color: var(--black); margin-bottom: 2rem; text-align: center; font-weight: 600;">Przegląd architektury</h3>
+                <div class="image-container large">
+                  <img src="assets/FLipNet.png" alt="Architektury" />
+                  <p class="image-caption">Rysunek 2: Schemat kompletnej architektury systemu FLipNet</p>
+                </div>
+              
+                <div class="method-flow">
+                  <h3>Przebieg działania architektury</h3>
+                  <ol>
+                    <li><strong>Przetwarzanie zbioru wsparcia:</strong> Próbki ze zbioru wsparcia są wprowadzane do specjalistycznego ekstraktora cech</li>
+                    <li><strong>Ekstrakcja cech czasowo-przestrzennych:</strong> Ekstraktor wykorzystuje konwolucje czasowo-przestrzenne w połączeniu z rekurencyjnymi jednostkami GRU, aby uchwycić zarówno wzorce ruchu warg, jak i dynamikę czasową</li>
+                    <li><strong>Generowanie osadzeń (embeddingów):</strong> Wyodrębnione cechy są przekształcane w bogate reprezentacje, które uchwytują charakterystyki konkretnego mówcy</li>
+                    <li><strong>Fuzja z wykorzystaniem mechanizmu cross-attention:</strong> Embeddingi są łączone z etykietami przy użyciu mechanizmu uwagi krzyżowej, co pozwala uzyskać kontekstowo bogate reprezentacje</li>
+                    <li><strong>Przetwarzanie przez hipersieć:</strong> Fuzje reprezentacji służą jako wejście do hipersieci, która generuje dostosowane do mówcy aktualizacje wag</li>
+                    <li><strong>Dynamiczna adaptacja wag:</strong> Hipersieć aktualizuje warstwę predykcyjną modelu, dostosowując ją do cech danego użytkownika</li>
+                    <li><strong>Predykcja:</strong> Zaktualizowana warstwa predykcyjna analizuje próbki ze zbioru zapytań w celu rozpoznania wypowiedzi</li>
+                  </ol>
+                </div>
+              
+                <h3 style="font-size: 1.5rem; color: var(--black); margin: 3rem 0 1.5rem 0; font-weight: 600;">Mechanizm uwagi krzyżowej (Cross-Attention)</h3>
+                <div class="image-container">
+                  <img src="assets/cross_attention.png" alt="Przetwarzanie za pomocą cross-attention" />
+                  <p class="image-caption">Rysunek 3: Mechanizm uwagi krzyżowej stosowany do fuzji embeddingów</p>
+                </div>
+                <p>
+                  Mechanizm uwagi krzyżowej umożliwia modelowi efektywne połączenie reprezentacji wejściowych ze zbioru wsparcia z odpowiadającymi im etykietami. Pozwala to uzyskać bardziej informatywne embeddingi, które stanowią podstawę dla dalszej adaptacji modelu.
+                </p>
+              
+                <h3 style="font-size: 1.5rem; color: var(--black); margin: 3rem 0 1.5rem 0; font-weight: 600;">Architektura hipersieci</h3>
+                <div class="image-container small">
+                  <img src="assets/hypernetwork.png" alt="Architektura hipersieci" />
+                  <p class="image-caption">Rysunek 4: Architektura hipersieci generującej dynamiczne aktualizacje wag</p>
+                </div>
+                <p>
+                  Hipersieć pełni rolę generatora aktualizacji wag predykcyjnych, bazując na embeddingach wzbogaconych kontekstowo przez cross-attention. Dzięki temu model jest w stanie szybko i skutecznie dostosować się do charakterystyki nowego mówcy, bez konieczności pełnego ponownego trenowania.
+                </p>
+                <p>
+                  Rozdzielenie głównego modelu i generatora wag pozwala na większą elastyczność oraz oszczędność obliczeniową. Taka konstrukcja umożliwia dynamiczną adaptację bez wpływu na resztę sieci przetwarzającej cechy wizualne.
+                </p>
+              
+                <p>
+                  Zaproponowana architektura łączy w sobie zalety konwolucyjnych cech czasowo-przestrzennych oraz elastyczność hipersieci. Konwolucje efektywnie uchwytują wzorce artykulacyjne, jednostki GRU modelują zależności czasowe w sekwencjach mowy, a mechanizm uwagi krzyżowej dostarcza hipersieci kontekstowo wzbogaconych danych, umożliwiając generowanie wysokiej jakości aktualizacji wag dopasowanych do nowego użytkownika.
+                </p>
+              </section>
+              <section id="settings">
+                <h2>Eksperymenty</h2>
+              
                 <div class="grid">
-                    <div class="card">
-                        <h3>Adaptation Speed</h3>
-                        <p>Our model achieves rapid speaker adaptation using minimal support samples, reducing the time required for personalization by up to 85% compared to conventional fine-tuning approaches.</p>
-                    </div>
-
-                    <div class="card">
-                        <h3>Accuracy Improvements</h3>
-                        <p>The architecture demonstrates significant accuracy gains across diverse speaker populations, with particular strengths in adapting to speakers with varying facial structures and speech patterns.</p>
-                    </div>
-
-                    <div class="card">
-                        <h3>Generalization Capability</h3>
-                        <p>Superior performance on unseen speakers validates the effectiveness of our hypernetwork approach in creating truly generalizable lipreading systems.</p>
-                    </div>
-
-                    <div class="card">
-                        <h3>Clinical Validation</h3>
-                        <p>Preliminary clinical testing shows promising results for healthcare applications, with healthcare professionals reporting improved communication accuracy with non-verbal patients.</p>
-                    </div>
+                  <div class="card">
+                    <h3>Unseen Setting</h3>
+                    <p>
+                      W trybie <strong>unseen</strong> system oceniany jest na podstawie próbek od mówców, którzy <strong>nie pojawili się w zbiorze treningowym</strong>. W naszym przypadku wydzielono czterech mówców (dwóch kobiet i dwóch mężczyzn) jako zbiór testowy, a pozostałe dane wykorzystano do treningu modelu.
+                    </p>
+                    <p>
+                      Taka konfiguracja pozwala sprawdzić <strong>zdolność modelu do uogólniania</strong> na wcześniej niewidzianych użytkowników — jest to kluczowe w przypadku systemów adaptacyjnych, których zadaniem jest rozpoznawanie mowy od nowych osób przy minimalnym nakładzie danych.
+                    </p>
+                  </div>
+              
+                  <div class="card">
+                    <h3>Overlapped Setting</h3>
+                    <p>
+                      W ustawieniu <strong>overlapped</strong> dane testowe pochodzą od tych samych mówców co dane treningowe, lecz zawierają inne wypowiedzi. Każdy mówca posiada zarówno przykłady w zbiorze treningowym, jak i w zbiorze testowym.
+                    </p>
+                    <p>
+                      Taki scenariusz pozwala ocenić, jak dobrze model potrafi rozpoznawać nowe zdania u <strong>znanych już mówców</strong>. Stanowi on prostsze zadanie niż tryb unseen, ale nadal wymaga generalizacji na poziomie wypowiedzi.
+                    </p>
+                  </div>
                 </div>
-
+              
                 <p>
-                    These results establish our FLipNet architecture as the new benchmark for adaptive lipreading systems. The combination of superior accuracy, rapid adaptation, and robust generalization makes it particularly suitable for real-world healthcare applications where reliable communication with non-verbal patients is critical.
+                    Do naszych eksperymentów wykorzystano dane z <strong>GRID corpus</strong> – zbioru obejmującego ponad 30 tysięcy nagrań wideo z synchronizowanym dźwiękiem i transkrypcją, zawierającego wypowiedzi 34 mówców. Skupiliśmy się wyłącznie na ustawieniu <strong>unseen</strong>, które stanowi większe wyzwanie niż konfiguracja overlapped, ponieważ testowane są wypowiedzi od mówców niewystępujących w zbiorze treningowym. Pozwala to rzetelnie ocenić <strong>zdolność modelu do adaptacji do nowych użytkowników</strong>.
                 </p>
-
-                <p>
-                    The success of this approach opens new possibilities for assistive technology in healthcare, potentially transforming how medical professionals interact with patients who face communication challenges due to medical conditions or treatments.
-                </p>
-
+              </section>
+              
+              <section id="results">
+                <h2>Wyniki</h2>
+              
+                <div class="highlight">
+                  <h3>Wyniki na poziomie state-of-the-art</h3>
+                  <p>
+                    Architektura FLipNet osiąga obecnie <strong>najlepsze wyniki w zadaniu odczytywania mowy z ruchu warg</strong>, znacząco przewyższając istniejące rozwiązania.
+                  </p>
+                </div>
+              
                 <div class="image-container">
-                    <img src="assets/qualitive.webp" alt="Qualitative Results Analysis" />
-                    <p class="image-caption">Figure 5: Qualitative analysis of lipreading predictions showing model performance across different scenarios</p>
+                  <img src="assets/results.webp" alt="Wyniki działania modelu" />
+                  <p class="image-caption">Zestawienie wyników eksperymentalnych – nasz model przewyższa pozostałe podejścia</p>
                 </div>
-            </section>
+              
+                <p>
+                  Przeprowadzone eksperymenty pokazują, że zastosowanie architektury opartej na hipersieci pozwala osiągnąć <strong>bezprecedensową skuteczność w scenariuszach few-shot lipreadingu</strong>. Osiągnięte wyniki wykazują wyraźną przewagę nad klasycznymi podejściami w kilku kluczowych obszarach:
+                </p>
+              
+                <div class="grid">
+                  <div class="card">
+                    <h3>Szybkość adaptacji</h3>
+                    <p>Model bardzo szybko dostosowuje się do nowego mówcy, wykorzystując jedynie kilka przykładów. Czas wymagany na personalizację został skrócony nawet o 85% w porównaniu do tradycyjnego fine-tuningu.</p>
+                  </div>
+              
+                  <div class="card">
+                    <h3>Poprawa dokładności</h3>
+                    <p>Architektura zapewnia znaczną poprawę dokładności dla zróżnicowanych mówców, szczególnie dobrze radząc sobie z różnicami w strukturze twarzy i stylu artykulacji.</p>
+                  </div>
+              
+                  <div class="card">
+                    <h3>Zdolność generalizacji</h3>
+                    <p>Wysoka skuteczność na danych od niewidzianych wcześniej mówców potwierdza skuteczność naszego podejścia opartego na hipersieci w tworzeniu systemów o dużej zdolności generalizacji.</p>
+                  </div>
+                </div>
+              
+                <p>
+                  Wyniki te wskazują, że FLipNet ustanawia nowy punkt odniesienia dla systemów adaptacyjnego lipreadingu. Połączenie wysokiej dokładności, szybkiej adaptacji oraz odporności na zmiany między mówcami czyni go atrakcyjnym rozwiązaniem dla rzeczywistych zastosowań, w których wymagana jest efektywna personalizacja.
+                </p>
+              
+                <div class="image-container">
+                  <img src="assets/qualitive.webp" alt="Analiza jakościowa wyników" />
+                  <p class="image-caption">Rysunek 5: Analiza jakościowa predykcji modelu w różnych scenariuszach</p>
+                </div>
+              </section>              
 
             <section id="team">
-                <h2>Research Team</h2>
+                <h2>Zespół</h2>
                 <div class="grid">
                     <div class="card">
-                        <h3>Research Team</h3>
+                        <h3>Autorzy projektu</h3>
                         <p>
-                            <strong>Adam Bednarski</strong><br>
-                            <strong>Łukasz Lenkiewicz</strong><br>
-                            <strong>Jan Masłowski</strong>
+                            <strong>Adam Bednarski</strong> <a href="https://www.linkedin.com/in/x-adam-bednarski/">Linkedin</a><br>
+                            <strong>Łukasz Lenkiewicz</strong> <a href="https://www.linkedin.com/in/lukasz-lenkiewicz/">Linkedin</a><br>
+                            <strong>Jan Masłowski</strong> <a href="https://www.linkedin.com/in/jan-mas%C5%82owski-bb5830314/">Linkedin</a>
                         </p>
                     </div>
 
                     <div class="card">
-                        <h3>Supervisors</h3>
+                        <h3>Opiekunowie</h3>
                         <p>
                             <strong>mgr inż. Przemysław Dolata</strong><br>
                             <strong>dr hab. inż. Maciej Zięba</strong>
