@@ -209,6 +209,10 @@ p {
     margin: 3rem 0;
 }
 
+.gif-container {
+    text-align: center;
+}
+
 .image-container img {
     max-width: 70%;
     height: auto;

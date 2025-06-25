@@ -41,104 +41,90 @@
         <main>
             <section id="introduction">
                 <h2>Wprowadzenie</h2>
-                <p><strong>Odczytywanie mowy z ruchu warg</strong> (ang. <em>lipreading</em>) to proces rozpoznawania wypowiedzi na podstawie ruchów ust mówcy. Choć dla większości z nas jest to umiejętność wspomagająca słuch, w sytuacjach, gdy dźwięk jest niedostępny lub zakłócony, staje się ona kluczowa. Technologia lipreadingu ma ogromny potencjał – może wspierać komunikację w hałaśliwym otoczeniu, a także umożliwiać porozumiewanie się osobom, które nie są w stanie komunikować się werbalnie, np. pacjenci po operacjach lub z zaburzeniami neurologicznymi.</p>
+                <p><strong>Odczytywanie mowy z ruchu warg</strong> (ang. <em>lipreading</em>) to proces rozpoznawania wypowiedzi na podstawie ruchów ust mówcy. Choć dla większości z nas jest to umiejętność wspomagająca słuch (efekt McGurka), to staje się ona kluczowa, w sytuacjach, gdy dźwięk jest niedostępny lub zakłócony. Technologia lipreadingu ma ogromny potencjał – może wspierać komunikację w hałaśliwym otoczeniu, a także umożliwiać porozumiewanie się osobom, które nie są w stanie komunikować się werbalnie, np. pacjenci po operacjach lub z zaburzeniami neurologicznymi.</p>
               
-                <p>W naszej pracy prezentujemy nowatorską architekturę do odczytywania mowy z ruchu warg. Nasze podejście wykorzystuje <em>hipersieci</em> (ang. <em>hypernetworks</em>) do dynamicznej aktualizacji wag głównego modelu, co umożliwia <strong>dostosowanie się do wcześniej niewidzianych mówców</strong>. Dzięki temu model potrafi efektywnie przystosować się do indywidualnych cech mimiki konkretnej osoby, co przekłada się na wyższą dokładność predykcji.</p>
+                <p>W naszej pracy prezentujemy nowatorski model do odczytywania mowy z ruchu warg. Opracowana metoda wykorzystuje <em>hipersieć</em> (ang. <em>hypernetwork</em>) do dynamicznej aktualizacji wag głównej architektury, co umożliwia <strong>skuteczną adaptację do nowych użytkowników</strong>. Dzięki temu model potrafi efektywnie przystosować się do indywidualnych cech mimiki konkretnej osoby, co przekłada się na wyższą dokładność predykcji.</p>
               
-                <p>Nasze rozwiązanie zostało zweryfikowane na zbiorze danych <strong>GRID</strong>, będącym standardem w badaniach nad lipreadingiem, i osiąga <strong>wyniki na poziomie state-of-the-art</strong>. Otwiera to nowe możliwości zastosowań – od cichych interfejsów głosowych, przez rozpoznawanie mowy w hałaśliwym otoczeniu, aż po technologie wspomagające osoby niemówiące.</p>
+                <p>Nasze rozwiązanie zostało zweryfikowane na zbiorze danych <strong>GRID</strong>, będącym standardem w badaniach nad lipreadingiem. Osiągnięte wyniki <strong>przewyższają najlepsze dotychczasowe rozwiązania</strong>. Otwiera to nowe możliwości zastosowań – od cichych interfejsów głosowych, przez rozpoznawanie mowy w hałaśliwym otoczeniu, aż po technologie wspomagające osoby z zaburzeniami mowy.</p>
               </section>              
 
             <section id="preprocessing">
                 <h2>Przygotowanie danych</h2>
-                <p>W celu zwiększenia skuteczności modelu oraz redukcji nieistotnych informacji wizualnych, zastosowaliśmy preprocessing nagrań wideo z wykorzystaniem bibliotek <strong>OpenCV</strong> oraz <strong>MediaPipe</strong>. Dla każdego nagrania automatycznie wykrywaliśmy twarz, a następnie wycinaliśmy region odpowiadający ustom mówcy.</p>
-              
-                <p>Takie podejście pozwala usunąć zbędny szum z wejścia do modelu, koncentrując się wyłącznie na istotnych sygnałach wizualnych związanych z artykulacją. Dodatkowo, zmniejszenie rozmiaru wejściowych danych przekłada się na <strong>niższe zapotrzebowanie na zasoby obliczeniowe</strong> i szybsze działanie całego systemu.</p>
+                <div class="image-container">
+                  <img src="assets/preprocessing.webp" alt="preprocessing" />
+                  <p class="image-caption">Przykład obszaru wyciętego z danej klatki nagrania w procesie przygotowania danych.</p>
+                </div>
+                <p>W celu zwiększenia skuteczności modelu i usunięcia zbędnego szumu, zastosowaliśmy preprocessing nagrań wideo z wykorzystaniem bibliotek <strong>OpenCV</strong> oraz <strong>MediaPipe</strong>. Dla każdego nagrania automatycznie wykrywaliśmy twarz, a następnie wycinaliśmy regiony odpowiadające ustom mówcy. Dodatkowo, zmniejszenie rozmiaru wejściowych danych przekłada się na <strong>niższe zapotrzebowanie na zasoby obliczeniowe</strong> i szybsze działanie całego systemu.</p>
             </section>
 
             <section id="background">
                 <h2>Few-Shot Learning</h2>
                 <p>
-                  Few-shot learning to paradygmat uczenia maszynowego, który umożliwia modelom przyswajanie nowych zadań lub dostosowywanie się do nowych danych przy użyciu jedynie kilku przykładów uczących. Podejście to jest szczególnie przydatne w sytuacjach, gdy zebranie dużej ilości oznaczonych danych jest kosztowne, czasochłonne lub trudne do zrealizowania.
+                  Few-shot learning to paradygmat uczenia maszynowego, który umożliwia modelom dostosowywanie się do nowych zadań przy użyciu jedynie kilku przykładów uczących. Podejście to jest szczególnie przydatne w sytuacjach, gdy zebranie dużej ilości oznaczonych danych jest kosztowne, czasochłonne lub trudne do zrealizowania.
                 </p>
               
                 <p>
-                  W kontekście odczytywania mowy z ruchu warg, few-shot learning pozwala naszemu systemowi szybko przystosować się do nowego mówcy, korzystając z ograniczonej liczby przykładów. Realizujemy to poprzez wykorzystanie koncepcji zbioru wsparcia (<em>support set</em>) i zbioru zapytań (<em>query set</em>), które stanowią fundament tej metodyki.
+                  W kontekście odczytywania mowy z ruchu warg, few-shot learning pozwala naszemu systemowi szybko przystosować się do nowego mówcy, korzystając z ograniczonej liczby przykładów. Realizujemy to poprzez wykorzystanie koncepcji zbioru wsparcia (ang. <em>support set</em>) i zbioru zapytań (ang. <em>query set</em>), które stanowią fundament tej metodyki.
                 </p>
               
                 <div class="grid">
                   <div class="card">
-                    <h3>Zbiór wsparcia (Support Set)</h3>
+                    <h3>Zbiór wsparcia</h3>
                     <div class="image-container">
                       <img src="assets/support.webp" alt="Przykłady ze zbioru wsparcia" />
-                      <p class="image-caption">Przykłady używane do dostosowania modelu do nowego mówcy</p>
+                      <p class="image-caption">Przykłady używane w celu dostosowania modelu do nowego mówcy.</p>
                     </div>
                     <p>
-                      Zbiór wsparcia zawiera niewielką liczbę oznaczonych przykładów od nowego mówcy. Próbki te dostarczają modelowi kluczowych informacji o indywidualnych cechach użytkownika, takich jak wzorce ruchu warg, struktura twarzy czy styl artykulacji. Nasza hipersieć wykorzystuje te dane do wygenerowania odpowiednio dostosowanych wag modelu.
+                      Zbiór wsparcia zawiera niewielką liczbę oznaczonych przykładów od nowego mówcy. Próbki te dostarczają modelowi kluczowych informacji o indywidualnych cechach użytkownika, takich jak wzorce ruchu warg, struktura twarzy czy styl artykulacji. Nasza hipersieć wykorzystuje te dane do wygenerowania aktualizacji wag modelu.
                     </p>
                   </div>
               
                   <div class="card">
-                    <h3>Zbiór zapytań (Query Set)</h3>
+                    <h3>Zbiór zapytań</h3>
                     <div class="image-container">
                       <img src="assets/query.webp" alt="Przykłady ze zbioru zapytań" />
-                      <p class="image-caption">Przykłady służące do oceny skuteczności adaptacji modelu</p>
+                      <p class="image-caption">Przykłady służące do oceny skuteczności adaptacji modelu.</p>
                     </div>
                     <p>
                       Zbiór zapytań składa się z nieoznaczonych próbek tego samego mówcy, które model musi rozpoznać po dokonaniu adaptacji. Taki schemat odzwierciedla rzeczywisty scenariusz, w którym system napotyka nowe wypowiedzi osoby, do której dopiero co został dostosowany.
                     </p>
                   </div>
                 </div>
-              
-                <p>
-                  Few-shot learning idealnie sprawdza się w zadaniach, w których każdy użytkownik stanowi osobny przypadek wymagający szybkiego dopasowania. Zamiast trenować model na dużych zbiorach danych dla każdego mówcy, nasz system potrafi się skutecznie spersonalizować na podstawie zaledwie kilku przykładów, co czyni go praktycznym w zastosowaniach wymagających elastyczności i niskich kosztów przygotowania danych.
-                </p>
               </section>
 
               <section id="method">
                 <h2>Metoda</h2>
-              
-                <h3 style="font-size: 1.75rem; color: var(--black); margin-bottom: 2rem; text-align: center; font-weight: 600;">Przegląd architektury</h3>
                 <div class="image-container large">
                   <img src="assets/FLipNet.png" alt="Architektury" />
-                  <p class="image-caption">Rysunek 2: Schemat kompletnej architektury systemu FLipNet</p>
+                  <p class="image-caption">Schemat kompletnej architektury systemu FLipNet.</p>
                 </div>
               
                 <div class="method-flow">
                   <h3>Przebieg działania architektury</h3>
                   <ol>
-                    <li><strong>Przetwarzanie zbioru wsparcia:</strong> Próbki ze zbioru wsparcia są wprowadzane do ekstraktora cech</li>
-                    <li><strong>Ekstrakcja cech czasowo-przestrzennych:</strong> Ekstraktor wykorzystuje konwolucje czasowo-przestrzenne (ang. <em>spatiotemporal convolutions</em>) w połączeniu z rekurencyjnymi jednostkami GRU, aby uchwycić zarówno wzorce ruchu warg, jak i dynamikę czasową</li>
-                    <li><strong>Generowanie osadzeń (embeddingów):</strong> Wyodrębnione cechy są przekształcane w bogate reprezentacje, które uchwytują charakterystyki konkretnego mówcy</li>
-                    <li><strong>Fuzja z wykorzystaniem mechanizmu cross-attention:</strong> Embeddingi są łączone z etykietami przy użyciu mechanizmu uwagi krzyżowej, co pozwala uzyskać kontekstowo bogate reprezentacje</li>
-                    <li><strong>Przetwarzanie przez hipersieć:</strong> Fuzje reprezentacji służą jako wejście do hipersieci, która generuje dostosowane do mówcy aktualizacje wag</li>
-                    <li><strong>Dynamiczna adaptacja wag:</strong> Hipersieć aktualizuje warstwę predykcyjną modelu, dostosowując ją do cech danego użytkownika</li>
-                    <li><strong>Predykcja:</strong> Zaktualizowana warstwa predykcyjna analizuje próbki ze zbioru zapytań w celu rozpoznania wypowiedzi</li>
+                    <li><strong>Ekstrakcja cech czasowo-przestrzennych:</strong> Ekstraktor wykorzystuje konwolucje czasowo-przestrzenne (ang. <em>spatiotemporal convolutions</em>) w połączeniu z rekurencyjnymi jednostkami GRU, aby uchwycić zarówno wzorce ruchu warg, jak i dynamikę czasową.</li>
+                    <li><strong>Fuzja z wykorzystaniem mechanizmu uwagi krzyżowej (ang. <em>cross-attention</em>):</strong> Osadzenia są łączone z etykietami przy użyciu mechanizmu uwagi krzyżowej, co pozwala uzyskać reprezentację wektorową całego zbioru wsparcia.</li>
+                    <li><strong>Przetwarzanie przez hipersieć:</strong> Uzyskana reprezentacja wektorowa stanowi wejście do hipersieci, która generuje dostosowane do mówcy aktualizacje wag modelu bazowego.</li>
+                    <li><strong>Predykcja:</strong> Zaktualizowana warstwa predykcyjna analizuje próbki ze zbioru zapytań w celu rozpoznania wypowiedzi.</li>
                   </ol>
                 </div>
               
-                <h3 style="font-size: 1.5rem; color: var(--black); margin: 3rem 0 1.5rem 0; font-weight: 600;">Mechanizm uwagi krzyżowej (Cross-Attention)</h3>
+                <h3 style="font-size: 1.5rem; color: var(--black); margin: 3rem 0 1.5rem 0; font-weight: 600;">Mechanizm uwagi krzyżowej</h3>
                 <div class="image-container">
                   <img src="assets/cross_attention.png" alt="Przetwarzanie za pomocą cross-attention" />
-                  <p class="image-caption">Rysunek 3: Mechanizm uwagi krzyżowej stosowany do fuzji embeddingów</p>
+                  <p class="image-caption">Mechanizm uwagi krzyżowej stosowany do fuzji osadzeń.</p>
                 </div>
                 <p>
-                  Mechanizm uwagi krzyżowej umożliwia modelowi efektywne połączenie reprezentacji wejściowych ze zbioru wsparcia z odpowiadającymi im etykietami. Pozwala to uzyskać bardziej informatywne embeddingi, które stanowią podstawę dla dalszej adaptacji modelu.
+                  W opracowanej metodzie zastosowano mechanizm uwagi krzyżowej pomiędzy dwoma modalnościami: wizualną oraz tekstową. Umożliwia to wykorzystanie relacji między ruchem ust, a wypowiadaną treścią. Reprezentacje przykładów ze zbioru wsparcia zostały zagregowane za pomocą operacji soft-pooling, co pozwoliło na uzyskanie niskowymiarowej reprezentacji wektorowej całego zadania.
                 </p>
               
                 <h3 style="font-size: 1.5rem; color: var(--black); margin: 3rem 0 1.5rem 0; font-weight: 600;">Architektura hipersieci</h3>
                 <div class="image-container small">
-                  <img src="assets/hypernetwork.png" alt="Architektura hipersieci" />
-                  <p class="image-caption">Rysunek 4: Architektura hipersieci generującej dynamiczne aktualizacje wag</p>
+                  <img src="assets/hypernetwork3.png" alt="Architektura hipersieci" />
+                  <p class="image-caption">Architektura hipersieci generującej dynamiczne aktualizacje wag.</p>
                 </div>
                 <p>
-                  Hipersieć pełni rolę generatora aktualizacji wag predykcyjnych, bazując na embeddingach wzbogaconych kontekstowo przez cross-attention. Dzięki temu model jest w stanie szybko i skutecznie dostosować się do charakterystyki nowego mówcy, bez konieczności pełnego ponownego trenowania.
-                </p>
-                <p>
-                  Rozdzielenie głównego modelu i generatora wag pozwala na większą elastyczność oraz oszczędność obliczeniową. Taka konstrukcja umożliwia dynamiczną adaptację bez wpływu na resztę sieci przetwarzającej cechy wizualne.
-                </p>
-              
-                <p>
-                  Zaproponowana architektura łączy w sobie zalety konwolucyjnych cech czasowo-przestrzennych oraz elastyczność hipersieci. Konwolucje efektywnie uchwytują wzorce artykulacyjne, jednostki GRU modelują zależności czasowe w sekwencjach mowy, a mechanizm uwagi krzyżowej dostarcza hipersieci kontekstowo wzbogaconych danych, umożliwiając generowanie wysokiej jakości aktualizacji wag dopasowanych do nowego użytkownika.
+                  Hipersieć pełni rolę generatora aktualizacji wag. Dzięki temu model jest w stanie szybko i skutecznie dostosować się do charakterystyki nowego mówcy, bez konieczności pełnego ponownego trenowania. Rozdzielenie głównego modelu i generatora wag pozwala na większą elastyczność oraz oszczędność obliczeniową. Taka konstrukcja umożliwia dynamiczną adaptację bez wpływu na resztę sieci przetwarzającej cechy wizualne.
                 </p>
               </section>
               <section id="settings">
@@ -146,35 +132,29 @@
               
                 <div class="grid">
                   <div class="card">
-                    <h3>Unseen Setting</h3>
+                    <h3>Wariant niewidzianych mówców (ang. <em>unseen speakers</em>)</h3>
                     <p>
-                      W trybie <strong>unseen</strong> system oceniany jest na podstawie próbek od mówców, którzy nie pojawili się w zbiorze treningowym. W naszym przypadku wydzielono czterech mówców (dwoje kobiet i dwóch mężczyzn) jako zbiór testowy, a pozostałe dane wykorzystano do treningu modelu.
-                    </p>
-                    <p>
-                      Taka konfiguracja pozwala sprawdzić zdolność modelu do uogólniania na wcześniej niewidzianych użytkowników — jest to kluczowe w przypadku systemów adaptacyjnych, których zadaniem jest rozpoznawanie mowy od nowych osób przy minimalnym nakładzie danych.
+                      W trybie <strong>unseen speakers</strong> system walidowany jest na podstawie próbek od mówców, którzy nie pojawili się w zbiorze treningowym. W naszym przypadku wydzielono czterech mówców (dwie kobiety i dwóch mężczyzn) jako zbiór testowy, a pozostałe dane wykorzystano do treningu modelu. Taka konfiguracja pozwala sprawdzić zdolność modelu do generalizacji. Jest to kluczowe w przypadku systemów adaptacyjnych, których zadaniem jest rozpoznawanie mowy osób spoza zbioru treningowego.
                     </p>
                   </div>
               
                   <div class="card">
-                    <h3>Overlapped Setting</h3>
+                    <h3>Wariant nakładających się mówców (ang. <em>overlapped speakers</em>)</h3>
                     <p>
-                      W ustawieniu <strong>overlapped</strong> dane testowe pochodzą od tych samych mówców co dane treningowe, lecz zawierają inne wypowiedzi. Każdy mówca posiada zarówno przykłady w zbiorze treningowym, jak i w zbiorze testowym.
-                    </p>
-                    <p>
-                      Taki scenariusz pozwala ocenić, jak dobrze model potrafi rozpoznawać nowe zdania u znanych już mówców. Stanowi on prostsze zadanie niż tryb unseen, ale nadal wymaga generalizacji na poziomie wypowiedzi.
+                      W ustawieniu <strong>overlapped speakers</strong> dane testowe pochodzą od tych samych mówców co dane treningowe, lecz zawierają ich inne wypowiedzi. Taki scenariusz pozwala ocenić, jak dobrze model potrafi rozpoznawać nowe zdania u znanych już mówców. Stanowi on prostsze zadanie niż tryb unseen, ale nadal wymaga generalizacji na poziomie wypowiedzi.
                     </p>
                   </div>
                 </div>
               
                 <p>
-                    Do naszych eksperymentów wykorzystano dane ze zbioru GRID obejmującego ponad 30 tysięcy nagrań wideo z synchronizowanym dźwiękiem i transkrypcją, zawierającego wypowiedzi 34 mówców. Skupiliśmy się na ustawieniu <strong>unseen</strong>, które stanowi większe wyzwanie niż konfiguracja overlapped, ponieważ testowane są wypowiedzi od mówców niewystępujących w zbiorze treningowym. Pozwala to rzetelnie ocenić zdolność modelu do adaptacji do nowych użytkowników.
+                    Do naszych eksperymentów wykorzystano dane ze zbioru GRID obejmującego ponad 30 tysięcy nagrań wideo z synchronizowanym dźwiękiem i transkrypcją, zawierającego wypowiedzi 33 mówców. Skupiliśmy się na ustawieniu <strong>unseen</strong>, które stanowi większe wyzwanie niż konfiguracja overlapped, ponieważ testowane są wypowiedzi od mówców niewystępujących w zbiorze treningowym. Pozwala to rzetelnie ocenić zdolność modelu do adaptacji do nowych użytkowników.
                 </p>
               </section>
               
               <section id="metrics">
                 <h2>Metryka</h2>
                 <p>
-                  Word Error Rate to standardowa metryka w dziedzinie rozpoznawania mowy, która mierzy <strong>procent niepoprawnie rozpoznanych słów</strong> w stosunku do całkowitej liczby słów w referencyjnej transkrypcji.
+                  Word Error Rate to standardowa metryka w dziedzinie rozpoznawania mowy, mierzy ona <strong>liczbę niepoprawnie rozpoznanych słów</strong> w stosunku do całkowitej liczby słów w referencyjnej transkrypcji.
                 </p>
               
                 <div class="method-flow">
@@ -182,35 +162,36 @@
                   <div style="text-align: center; font-size: 1.25rem; margin: 2rem 0; font-weight: 600; color: var(--black);">
                     \( WER = \frac{S + D + I}{N} \times 100\% \)
                   </div>
-                  <p style="text-align: center; font-style: italic; color: var(--medium-gray);">
-                    gdzie <strong>N</strong> to całkowita liczba słów w referencyjnej transkrypcji
+                  
+                  <p>
+                    <strong>Zastąpienia (S) – ang. substitutions</strong> – liczba słów, które zostały zastąpione innymi słowami.
                   </p>
                   
                   <p>
-                    <strong>Zastąpienia (S) – ang. substitutions</strong> – liczba słów, które zostały zastąpione innymi słowami. Na przykład, gdy model przewiduje słowo "kot" zamiast "dom".
-                  </p>
-                
-                  <p>
                     <strong>Usunięcia (D) – ang. deletions</strong> – liczba słów z referencji, które nie zostały rozpoznane przez system. Słowa te są obecne w prawdziwej transkrypcji, ale brakuje ich w predykcji.
                   </p>
-                
+                  
                   <p>
                     <strong>Wstawienia (I) – ang. insertions</strong> – liczba dodatkowych słów, które model przewidział, ale nie występują w referencyjnej transkrypcji.
                   </p>
+
+                  <p>
+                    <strong>Liczba słów (N)</strong> - całkowita liczba słów w referencyjnej transkrypcji.
+                  </p>
                 </div>
-              
+                
                 <p>
-                  W kontekście lipreadingu WER jest szczególnie istotny, ponieważ każde słowo ma znaczenie dla zrozumienia komunikatu. Niski WER oznacza, że system skutecznie rozpoznaje większość wypowiadanych słów, co przekłada się na praktyczną użyteczność w rzeczywistych zastosowaniach.
+                  W kontekście lipreadingu WER jest szczególnie istotny, ponieważ każde słowo ma znaczenie dla zrozumienia komunikatu. Jego niska wartość oznacza, że system skutecznie rozpoznaje większość wypowiadanych słów, co przekłada się na praktyczną użyteczność w rzeczywistych zastosowaniach.
                 </p>
               
-                <p>
-                  Typowe wartości WER dla systemów lipreadingu wahają się od 20% do 80%, w zależności od złożoności zadania i jakości danych. Im niższy WER, tym lepszy system – wartość 0% oznaczałaby perfekcyjne rozpoznawanie wszystkich słów, podczas gdy WER powyżej 100% wskazuje na bardzo słabą wydajność systemu.
-                </p>
               </section>
               
               <section id="results">
                 <h2>Wyniki</h2>
-              
+                <div class="gif-container">
+                  <img src="assets/SOTA.gif" alt="State-of-the-art results animation" />
+                </div>
+                
                 <div class="highlight">
                   <h3>Wyniki na poziomie state-of-the-art</h3>
                   <p>
@@ -218,13 +199,15 @@
                   </p>
                 </div>
               
+              
+              
                 <div class="image-container">
                   <img src="assets/results.webp" alt="Wyniki działania modelu" />
-                  <p class="image-caption">Zestawienie wyników eksperymentalnych – nasz model przewyższa pozostałe podejścia</p>
+                  <p class="image-caption">Zestawienie wyników eksperymentalnych – nasz model przewyższa pozostałe podejścia.</p>
                 </div>
               
                 <p>
-                  Przeprowadzone eksperymenty pokazują, że zastosowanie architektury opartej na hipersieci pozwala osiągnąć bezprecedensową skuteczność w scenariuszach few-shot lipreadingu. Osiągnięte wyniki wykazują wyraźną przewagę nad klasycznymi podejściami w kilku kluczowych obszarach:
+                  Przeprowadzone eksperymenty pokazują, że zastosowanie architektury opartej na hipersieci pozwala osiągnąć bezprecedensową skuteczność w zadaniu lipreadingu. Osiągnięte wyniki wykazują wyraźną przewagę nad klasycznymi podejściami w kilku kluczowych obszarach:
                 </p>
               
                 <div class="grid">
@@ -246,13 +229,13 @@
                   
               
                 <p>
-                  Wyniki te wskazują, że FLipNet ustanawia nowy punkt odniesienia dla systemów adaptacyjnego lipreadingu. Połączenie wysokiej dokładności, szybkiej adaptacji oraz odporności na zmiany między mówcami czyni go atrakcyjnym rozwiązaniem dla rzeczywistych zastosowań, w których wymagana jest efektywna personalizacja.
+                  Wyniki te wskazują, że FLipNet ustanawia nowy punkt odniesienia dla systemów lipreadingu. Połączenie wysokiej dokładności, szybkiej adaptacji oraz odporności na zmiany między mówcami czyni go atrakcyjnym rozwiązaniem dla rzeczywistych zastosowań, w których wymagana jest efektywna personalizacja.
                 </p>
               
-                <div class="image-container">
+                <!-- <div class="image-container">
                   <img src="assets/qualitive.webp" alt="Analiza jakościowa wyników" />
-                  <p class="image-caption">Rysunek 5: Analiza jakościowa predykcji modelu.</p>
-                </div>
+                  <p class="image-caption">Analiza jakościowa predykcji modelu.</p>
+                </div> -->
               </section>              
 
             <section id="team">
